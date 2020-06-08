@@ -1,0 +1,6 @@
+module findjalpc(jalr,id_ra,ex_result,ex_rw,ex_regWr,mem_result,mem_regWr,mem_rw,wr_rw,wr_regWr,wr_result,jalpc);
+	input wire[4:0] id_ra,ex_rw,mem_rw,wr_rw;
+	input wire ex_regWr,mem_regWr,wr_regWr,jalr;
+	input wire[31:0] ex_result,mem_result,wr_result;
+
+	
