@@ -116,7 +116,7 @@ begin
 			regDst = 0;  //have nothing to do with
 			regWr = 0;
 			alusrc = 0;
-			memtoreg = 1;  //have nothing to do with
+			memtoreg = 0;  //have nothing to do with
 			memWr = 0;
    			checkover = 0;
 			jump = 0;
@@ -136,7 +136,7 @@ begin
 			regDst = 0;  //have nothing to do with
 			regWr = 0;
 			alusrc = 0;
-			memtoreg = 1;  //have nothing to do with
+			memtoreg = 0;  //have nothing to do with
 			memWr = 0;
 			checkover = 0;
 			jump = 0;
@@ -156,7 +156,7 @@ begin
 			regDst = 0;  //have nothing to do with
 			regWr = 0;
 			alusrc = 0;  //have nothing to do with
-			memtoreg = 1;  //have nothing to do with
+			memtoreg = 0;  //have nothing to do with
 			memWr = 0;
 			checkover = 0;
 			jump = 1;

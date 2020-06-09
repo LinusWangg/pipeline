@@ -14,7 +14,7 @@ module IFIDReg(
 	hazard,
 	BranchBubble,
 	id_pc_plus_4,
-	id_ins,
+	id_ins
 );
 
 input clk,branch_beq,branch_bne,bgez,bgtz,blez,bltz,jalr,jal,jump,hazard,BranchBubble;

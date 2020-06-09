@@ -5,12 +5,12 @@ module mips(clk,rst);
 	wire[29:0] NPC,PC,PC_plus_4,jalpc,jalpc1;
 	wire[31:0] if_ins;
 
-	wire branch_beq,branch_bne,bgez,blez,bgtz,bltz,zbgez,zbgtz,jump,jal,jalr;
+	wire branch_beq,branch_bne,bgez,blez,bgtz,bltz,zbgez,zbgtz,zbeq,zbne,jump,jal,jalr;
 	wire branchbubble,r31Wr;
 	wire[1:0] branchforwardA,branchforwardB,jalforward;
 	wire[31:0] id_ins;
 	wire[29:0] id_PC_plus_4;
-	wire[31:0] id_busA,id_busA_mux2,id_busB,id_busB_mux2;
+	wire[31:0] id_busA,id_busA_mux2,id_busB,id_busB_mux2,mem_forward,wr_forward;
 	wire[4:0] id_ra,id_rb,id_rw;
 	wire[31:0] id_imm32;
 	wire[15:0] id_imm16;
@@ -59,7 +59,7 @@ module mips(clk,rst);
 	
 	mux4 mux_jalpc(jalpc1,ex_result[31:2],mem_result[31:2],wr_result[31:2],jalforward,jalpc);
 	
-	npc get_npc(PC,target,id_imm16,jalpc,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,zbgez,zbgtz,id_jalr,id_jal,mem_zero,id_jump,NPC);
+	npc get_npc(PC,target,id_imm16,jalpc,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,zbgez,zbgtz,zbeq,zbne,id_jalr,id_jal,mem_zero,id_jump,NPC);
 	assign PC_plus_4 = PC+1;
 	im_4k get_im(PC[9:0],if_ins);
 
@@ -77,13 +77,17 @@ module mips(clk,rst);
 	
 	HazardUnit hazard1(ex_memtoreg&ex_regWr,ex_rw_mux2,id_ra,id_rb,hazard);
 
-	branchforward branchforward(id_ra,id_rb,ex_rw_mux2,ex_regWr,mem_rw,mem_regWr,mem_memtoreg,wr_rw,wr_regWr,branchforwardA,branchforwardB);
+	branchforward branchforward(id_ra,id_rb,ex_rw_mux2,ex_regWr,mem_rw,mem_regWr,mem_memtoreg,wr_rw,wr_regWr,wr_memtoreg,branchforwardA,branchforwardB);
 
-	mux4 mux_judgeA(id_busA,ex_result,mem_result,wr_result,branchforwardA,id_busA_mux2);
+	mux_memtoreg mux_memforward(mem_result,mem_Dataout,mem_memtoreg,mem_forward);
 
-	mux4 mux_judgeB(id_busB,ex_result,mem_result,wr_result,branchforwardB,id_busB_mux2);
+	mux_memtoreg mux_wrforward(wr_result,wr_Dataout,wr_memtoreg,wr_forward);
+
+	mux4 mux_judgeA(id_busA,ex_result,mem_forward,wr_forward,branchforwardA,id_busA_mux2);
+
+	mux4 mux_judgeB(id_busB,ex_result,mem_forward,wr_forward,branchforwardB,id_busB_mux2);
 	
-	branchjudge branchjudge(id_busA_mux2,id_bgez,id_bgtz,id_blez,id_bltz,zbgez,zbgtz);
+	branchjudge branchjudge(id_busA_mux2,id_busB_mux2,id_bgez,id_bgtz,id_blez,id_bltz,id_branch_beq,id_branch_bne,zbgez,zbgtz,zbeq,zbne);
 
 	branchbubble branchbubble1(id_ra,id_rb,ex_regWr,ex_rw_mux2,mem_regWr,mem_memtoreg,mem_rw,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,id_jalr,id_jal,branchbubble);
 

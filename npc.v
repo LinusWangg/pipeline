@@ -11,6 +11,8 @@ module npc(
 	bltz,
 	zbgez,
 	zbgtz,
+	zbeq,
+	zbne,
 	jalr,
 	jal,
 	zero,
@@ -21,7 +23,7 @@ module npc(
 input wire[15:0] immediate;
 input wire jump;
 input wire zero;  //zero-alu??????
-input wire branch_beq,branch_bne,bgez,bgtz,blez,bltz,jalr,jal,zbgez,zbgtz;
+input wire branch_beq,branch_bne,bgez,bgtz,blez,bltz,jalr,jal,zbgez,zbgtz,zbeq,zbne;
 input wire[25:0] target;
 input wire[29:0] cur_pc;
 input wire[29:0] jal_pc;
@@ -34,16 +36,16 @@ initial begin
 	next_pc = 30'd0;
 end
 
-always@(jump or immediate or zero or branch_beq or branch_bne or target or cur_pc or jal_pc or jump or bgez or bgtz or blez or bltz or zbgez or zbgtz or jalr or jal)
+always@(jump or immediate or zero or branch_beq or branch_bne or target or cur_pc or jal_pc or jump or bgez or bgtz or blez or bltz or zbgez or zbgtz or zbne or zbeq or jalr or jal)
 begin
 	if(jalr == 1) //jalr
 		next_pc = jal_pc;
 	else if(jal == 1)  //jal
 		next_pc = {cur_pc[29:26],target[25:0]};
 	else if(branch_bne == 1)  //bne
-		next_pc = (branch_bne&!zero)?cur_pc-1+{14'b0,immediate}:cur_pc;
+		next_pc = (zbne)?cur_pc-1+{14'b0,immediate}:cur_pc;
 	else if(branch_beq == 1)  //beq
-		next_pc = (branch_beq&zero)?cur_pc-1+{14'b0,immediate}:cur_pc;
+		next_pc = (zbeq)?cur_pc-1+{14'b0,immediate}:cur_pc;
 	else if(bgez == 1)  //bgez
 		next_pc = (zbgez==1)?cur_pc-1+{14'b0,immediate}:cur_pc;
 	else if(bltz == 1)  //bltz

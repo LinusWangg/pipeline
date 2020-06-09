@@ -27,8 +27,8 @@ always@(posedge clk)
 begin
 	if(hazard || BranchBubble) begin
 	
-	end else
-	if(branch_beq || branch_bne || bgez || bgtz || blez || bltz || jalr || jal || jump) begin
+	end 
+	else if(branch_beq || branch_bne || bgez || bgtz || blez || bltz || jalr || jal || jump) begin
 		id_ins = 32'b0;
 		id_pc_plus_4 = pc_plus_4;
 	end

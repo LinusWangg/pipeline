@@ -32,7 +32,7 @@ w1591601388
 FG:/PA/examples/pipeline/ALU.v
 L0 1
 Z4 OL;L;10.5;63
-Z5 !s108 1591628457.000000
+Z5 !s108 1591713834.000000
 !s107 G:/PA/examples/pipeline/ALU.v|
 !s90 -reportprogress|300|-work|work|-vopt|-stats=none|G:/PA/examples/pipeline/ALU.v|
 !i113 0
@@ -52,7 +52,7 @@ w1591621159
 FG:/PA/examples/pipeline/branchbubble.v
 L0 1
 R4
-Z7 !s108 1591628458.000000
+Z7 !s108 1591713837.000000
 !s107 G:/PA/examples/pipeline/branchbubble.v|
 !s90 -reportprogress|300|-work|work|-vopt|-stats=none|G:/PA/examples/pipeline/branchbubble.v|
 !i113 0
@@ -64,10 +64,10 @@ r1
 !s85 0
 31
 !i10b 1
-!s100 ZS1NbjgodcoGT>Q`UjbGD1
-IU66E]2PR=9i:iBV>YWcnE0
+!s100 ]g^mk31]n]l11N:H3jcoR1
+IY=gaS22<WSBJ5HgOLn8Qi3
 R3
-w1591623632
+w1591713829
 Z8 8G:/PA/examples/pipeline/branchfoward.v
 Z9 FG:/PA/examples/pipeline/branchfoward.v
 L0 1
@@ -105,10 +105,10 @@ r1
 !s85 0
 31
 !i10b 1
-!s100 XEm1:4U6BFGA2;U[:_oF^3
-IiS;XM5j@EAJ9:;BY>ja2M1
+!s100 c5[zWek:JX]HciNl=MOh>3
+IMQK]UTaZ3_2MzlnYd_eUU0
 R3
-w1591628448
+w1591664227
 8G:/PA/examples/pipeline/zerobranchjudge.v
 FG:/PA/examples/pipeline/zerobranchjudge.v
 L0 1
@@ -125,10 +125,10 @@ r1
 !s85 0
 31
 !i10b 1
-!s100 l<B4:CNm8T1MRgW0]^nCn0
-IDD^A?=ELVnE_zQYH<JB:n2
+!s100 5m;JM_jIbCEZ:c]4[ZDfm2
+IzeX@Sg?K<2K>PzL55MzQ71
 R3
-w1591605084
+w1591666560
 8G:/PA/examples/pipeline/contorl.v
 FG:/PA/examples/pipeline/contorl.v
 L0 2
@@ -255,7 +255,7 @@ w1591595500
 FG:/PA/examples/pipeline/idexreg.v
 L0 1
 R4
-R5
+Z12 !s108 1591713836.000000
 !s107 G:/PA/examples/pipeline/idexreg.v|
 !s90 -reportprogress|300|-work|work|-vopt|-stats=none|G:/PA/examples/pipeline/idexreg.v|
 !i113 0
@@ -267,15 +267,15 @@ r1
 !s85 0
 31
 !i10b 1
-!s100 1ENJT;Q5hAMgPCdFNBQai1
-ImcaUC:dJgDITTdeb5P14[0
+!s100 =:[7_jFLlW0NQRU2W_@DL1
+IE_0L9>:`Z3CN7QQ4RW<LE1
 R3
-w1591601469
+w1591713285
 8G:/PA/examples/pipeline/ifidreg.v
 FG:/PA/examples/pipeline/ifidreg.v
 L0 1
 R4
-R5
+R12
 !s107 G:/PA/examples/pipeline/ifidreg.v|
 !s90 -reportprogress|300|-work|work|-vopt|-stats=none|G:/PA/examples/pipeline/ifidreg.v|
 !i113 0
@@ -296,7 +296,7 @@ w1589597721
 FG:/PA/examples/pipeline/im.v
 L0 1
 R4
-R5
+R12
 !s107 G:/PA/examples/pipeline/im.v|
 !s90 -reportprogress|300|-work|work|-vopt|-stats=none|G:/PA/examples/pipeline/im.v|
 !i113 0
@@ -336,7 +336,7 @@ w1591584023
 FG:/PA/examples/pipeline/memwr.v
 L0 1
 R4
-R5
+R12
 !s107 G:/PA/examples/pipeline/memwr.v|
 !s90 -reportprogress|300|-work|work|-vopt|-stats=none|G:/PA/examples/pipeline/memwr.v|
 !i113 0
@@ -348,10 +348,10 @@ r1
 !s85 0
 31
 !i10b 1
-!s100 ATW=onLhQH2h^ciP^;Y4b0
-I`IiBFdkPO<9iWZ09m8D101
+!s100 Z_nJQa6em2VbkKDB<0]8z0
+ICYQSIM[`U2S1S@e[>mDl^0
 R3
-w1591627067
+w1591667543
 8G:/PA/examples/pipeline/mips.v
 FG:/PA/examples/pipeline/mips.v
 L0 1
@@ -371,14 +371,14 @@ r1
 !s100 QlOZhodM0Qh]B_l=YbJ>T0
 IGVM0GTmDUCW2XNb5HQlV^1
 R3
-Z12 w1591618364
-Z13 8G:/PA/examples/pipeline/mux1.v
-Z14 FG:/PA/examples/pipeline/mux1.v
+Z13 w1591618364
+Z14 8G:/PA/examples/pipeline/mux1.v
+Z15 FG:/PA/examples/pipeline/mux1.v
 L0 17
 R4
-R5
-Z15 !s107 G:/PA/examples/pipeline/mux1.v|
-Z16 !s90 -reportprogress|300|-work|work|-vopt|-stats=none|G:/PA/examples/pipeline/mux1.v|
+R12
+Z16 !s107 G:/PA/examples/pipeline/mux1.v|
+Z17 !s90 -reportprogress|300|-work|work|-vopt|-stats=none|G:/PA/examples/pipeline/mux1.v|
 !i113 0
 R6
 R1
@@ -391,14 +391,14 @@ r1
 !s100 e5Se0jRnWcF?OZm5fT]l]2
 I5F98l0`dY3khaZbKncTo40
 R3
-R12
 R13
 R14
+R15
 L0 25
 R4
-R5
-R15
+R12
 R16
+R17
 !i113 0
 R6
 R1
@@ -411,14 +411,14 @@ r1
 !s100 V^Ao_j;ckoZR;@3S6eH=;1
 IC0`6CEikZTnQhfKm[naC]3
 R3
-R12
 R13
 R14
+R15
 L0 1
 R4
-R5
-R15
+R12
 R16
+R17
 !i113 0
 R6
 R1
@@ -431,14 +431,14 @@ r1
 !s100 ?aSb4aT^Nlo]>4acijek`1
 IKVl=]hg@X]j@iUOE=8gbz2
 R3
-R12
 R13
 R14
+R15
 L0 9
 R4
-R5
-R15
+R12
 R16
+R17
 !i113 0
 R6
 R1
@@ -448,15 +448,15 @@ r1
 !s85 0
 31
 !i10b 1
-!s100 2D:i4A[DMF`EbK_Z]iSf;2
-IQP@=nTzk43S05oDMQ700H2
+!s100 eP]96@C9KDeFbGzSQ0BDV3
+Iffb@<dnSk[l<Ild?4alBK0
 R3
-w1591627662
+w1591665043
 8G:/PA/examples/pipeline/npc.v
 FG:/PA/examples/pipeline/npc.v
 L0 1
 R4
-R5
+R12
 !s107 G:/PA/examples/pipeline/npc.v|
 !s90 -reportprogress|300|-work|work|-vopt|-stats=none|G:/PA/examples/pipeline/npc.v|
 !i113 0
@@ -476,7 +476,7 @@ w1591509899
 FG:/PA/examples/pipeline/pc.v
 L0 1
 R4
-R7
+R12
 !s107 G:/PA/examples/pipeline/pc.v|
 !s90 -reportprogress|300|-work|work|-vopt|-stats=none|G:/PA/examples/pipeline/pc.v|
 !i113 0
@@ -496,7 +496,7 @@ w1591600255
 FG:/PA/examples/pipeline/regFile.v
 L0 1
 R4
-R7
+R12
 !s107 G:/PA/examples/pipeline/regFile.v|
 !s90 -reportprogress|300|-work|work|-vopt|-stats=none|G:/PA/examples/pipeline/regFile.v|
 !i113 0
@@ -533,13 +533,13 @@ r1
 I_YV^BKmR]Fb;RcB`DQU>b0
 R3
 w1591601046
-Z17 8G:/PA/examples/pipeline/test.v
-Z18 FG:/PA/examples/pipeline/test.v
+Z18 8G:/PA/examples/pipeline/test.v
+Z19 FG:/PA/examples/pipeline/test.v
 L0 2
 R4
 R7
-Z19 !s107 G:/PA/examples/pipeline/test.v|
-Z20 !s90 -reportprogress|300|-work|work|-vopt|-stats=none|G:/PA/examples/pipeline/test.v|
+Z20 !s107 G:/PA/examples/pipeline/test.v|
+Z21 !s90 -reportprogress|300|-work|work|-vopt|-stats=none|G:/PA/examples/pipeline/test.v|
 !i113 0
 R6
 R1
@@ -553,13 +553,13 @@ r1
 IU=2h]5nD2YHoD6a;M9NTj2
 R3
 w1591600624
-R17
 R18
+R19
 L0 1
 R4
 !s108 1591600819.000000
-R19
 R20
+R21
 !i113 0
 R6
 R1
