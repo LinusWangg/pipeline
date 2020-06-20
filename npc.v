@@ -43,17 +43,17 @@ begin
 	else if(jal == 1)  //jal
 		next_pc = {cur_pc[29:26],target[25:0]};
 	else if(branch_bne == 1)  //bne
-		next_pc = (zbne)?cur_pc-1+{14'b0,immediate}:cur_pc;
+		next_pc = (zbne)?cur_pc-1+{14'b0,immediate}:cur_pc+1;
 	else if(branch_beq == 1)  //beq
-		next_pc = (zbeq)?cur_pc-1+{14'b0,immediate}:cur_pc;
+		next_pc = (zbeq)?cur_pc-1+{14'b0,immediate}:cur_pc+1;
 	else if(bgez == 1)  //bgez
-		next_pc = (zbgez==1)?cur_pc-1+{14'b0,immediate}:cur_pc;
+		next_pc = (zbgez==1)?cur_pc-1+{14'b0,immediate}:cur_pc+1;
 	else if(bltz == 1)  //bltz
-		next_pc = (zbgez==0)?cur_pc-1+{14'b0,immediate}:cur_pc;
+		next_pc = (zbgez==0)?cur_pc-1+{14'b0,immediate}:cur_pc+1;
 	else if(bgtz == 1)  //bgtz
-		next_pc = (zbgtz==1)?cur_pc-1+{14'b0,immediate}:cur_pc;
+		next_pc = (zbgtz==1)?cur_pc-1+{14'b0,immediate}:cur_pc+1;
 	else if(blez == 1)  //blez
-		next_pc = (zbgtz==0)?cur_pc-1+{14'b0,immediate}:cur_pc;
+		next_pc = (zbgtz==0)?cur_pc-1+{14'b0,immediate}:cur_pc+1;
 	else if(jump == 1)  //jump
 		next_pc = {cur_pc[29:26],target[25:0]};
 	else

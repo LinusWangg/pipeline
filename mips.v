@@ -63,7 +63,7 @@ module mips(clk,rst);
 	assign PC_plus_4 = PC+1;
 	im_4k get_im(PC[9:0],if_ins);
 
-	IFIDReg ifidreg(clk,PC_plus_4,if_ins,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,id_jalr,id_jal,id_jump,hazard,branchbubble,id_PC_plus_4,id_ins);
+	IFIDReg ifidreg(clk,PC_plus_4,if_ins,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,zbeq,zbne,zbgez,zbgtz,id_jalr,id_jal,id_jump,hazard,branchbubble,id_PC_plus_4,id_ins);
 
 	decoder decoder(id_ins,id_op,id_ra,id_rb,id_rw,id_shamt,id_func,id_imm16,target);
 
@@ -89,7 +89,7 @@ module mips(clk,rst);
 	
 	branchjudge branchjudge(id_busA_mux2,id_busB_mux2,id_bgez,id_bgtz,id_blez,id_bltz,id_branch_beq,id_branch_bne,zbgez,zbgtz,zbeq,zbne);
 
-	branchbubble branchbubble1(id_ra,id_rb,ex_regWr,ex_rw_mux2,mem_regWr,mem_memtoreg,mem_rw,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,id_jalr,id_jal,branchbubble);
+	branchbubble branchbubble1(id_ra,id_rb,ex_regWr,ex_rw_mux2,ex_memtoreg,mem_regWr,mem_memtoreg,mem_rw,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,branchbubble);
 
 	id_ex idexreg(clk,hazard,branchbubble,id_busA,id_busB,id_ra,id_rb,id_rw,id_imm32,id_regWr,id_regDst,id_alusrc,id_memWr,id_memtoreg,id_checkover,id_aluop,id_shamt,id_op,
 					ex_busA,ex_busB,ex_ra,ex_rb,ex_rw,ex_imm32,ex_regWr,ex_regDst,ex_alusrc,ex_memwr,ex_memtoreg,ex_checkover,ex_aluop,ex_shamt,ex_op);
