@@ -10,7 +10,7 @@ output wire[31:0] dout;
 reg [31:0] im [1023:0];
 
 initial begin
-	$readmemh("code.txt",im);
+	$readmemh("test.txt",im);
 end
 
 assign dout = im[addr];

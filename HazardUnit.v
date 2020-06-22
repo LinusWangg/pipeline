@@ -1,6 +1,6 @@
 module HazardUnit(ex_memtoreg,ex_rw,id_ra,id_rb,hazard);
 
-input wire ex_memtoreg;
+input wire[1:0] ex_memtoreg;
 input wire[4:0] ex_rw,id_ra,id_rb;
 
 output reg hazard;

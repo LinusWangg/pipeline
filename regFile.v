@@ -7,33 +7,46 @@ module regfile(
 	addr,
 	regWe,
 	r31We,
+	multWe,
 	r31,
+	Lowin,
+	Highin,
 	busW,
+	busmult,
 	busA,
 	busB,
+	Highout,
+	Lowout,
 	jalpc
 );
 
-input wire clk,regWe,r31We;
+input wire clk,regWe,r31We,multWe,Highin,Lowin;
 input wire[4:0] rs,rt,rw;
 input wire[5:0] op;
 input wire[11:0] addr;
 input wire[31:0] busW;
+input wire[63:0] busmult;
 input wire[29:0] r31;
-output reg[31:0] busA,busB;
+output reg[31:0] busA,busB,Highout,Lowout;
 output reg[29:0] jalpc;
 
 reg [31:0]registers[31:0];
+reg [31:0]High;
+reg [31:0]Low;
 integer i;
 initial begin
 	for(i=0;i<32;i=i+1)
 		registers[i]=0;
+	High=0;
+	Low=0;
 end
 
 always@(*) begin
 	busA = registers[rs];
 	busB = registers[rt];
 	jalpc = registers[rs][31:2];
+	Highout = High[31:0];
+	Lowout = Low[31:0];
 end
 
 always@(negedge clk) begin
@@ -70,6 +83,19 @@ always@(negedge clk) begin
 	end
 	if(r31We)
 		registers[31] = {r31,2'b0};
+	if(multWe)
+	begin
+		High = busmult[63:32];
+		Low = busmult[31:0];
+	end
+	if(Highin)
+	begin
+		High = busW;
+	end
+	if(Lowin)
+	begin
+		Low = busW;
+	end
 end
 
 endmodule

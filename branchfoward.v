@@ -1,7 +1,8 @@
 module branchforward(id_rs,id_rt,ex_rw,ex_regWr,mem_rw,mem_regWr,mem_memtoreg,wr_rw,wr_regWr,wr_memtoreg,branchforwardA,branchforwardB);
 
 input wire[4:0] id_rs,id_rt,mem_rw,ex_rw,wr_rw;
-input mem_memtoreg,mem_regWr,ex_regWr,wr_regWr,wr_memtoreg;
+input mem_regWr,ex_regWr,wr_regWr;
+input [1:0]mem_memtoreg,wr_memtoreg;
 output reg [1:0]branchforwardA,branchforwardB;
 
 initial begin

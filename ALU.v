@@ -6,7 +6,8 @@ module alu(
 	DataB,
 	zero,
 	overflow,
-	result
+	result,
+	mult,
 );
 
 input wire[4:0] aluop;
@@ -16,6 +17,7 @@ input wire[31:0] DataB;
 input wire checkover;
 output reg zero,overflow;
 output reg[31:0] result;
+output reg[63:0] mult;
 reg Cout;
 
 always@(aluop or DataA or DataB) begin
@@ -87,6 +89,10 @@ always@(aluop or DataA or DataB) begin
 		5'b10000: begin  //lui
 		result = DataB * 65536;
 		zero = (result == 0)?1:0;
+		end
+		5'b10001: begin  //mult
+		mult = ($signed(DataA)) * ($signed(DataB));
+		zero = (mult == 0)?1:0;
 		end
 	endcase
 end
