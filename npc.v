@@ -3,6 +3,8 @@ module npc(
 	target,
 	immediate,
 	jal_pc,
+	cp0op,
+	cp0_pcout,
 	branch_beq,
 	branch_bne,
 	bgez,
@@ -21,12 +23,13 @@ module npc(
 );
 
 input wire[15:0] immediate;
+input wire[2:0] cp0op;
 input wire jump;
 input wire zero;  //zero-alu??????
 input wire branch_beq,branch_bne,bgez,bgtz,blez,bltz,jalr,jal,zbgez,zbgtz,zbeq,zbne;
 input wire[25:0] target;
 input wire[29:0] cur_pc;
-input wire[29:0] jal_pc;
+input wire[29:0] jal_pc,cp0_pcout;
 output reg[29:0] next_pc;
 
 reg [29:0] branch_next;
@@ -56,6 +59,10 @@ begin
 		next_pc = (zbgtz==0)?cur_pc-1+{14'b0,immediate}:cur_pc+1;
 	else if(jump == 1)  //jump
 		next_pc = {cur_pc[29:26],target[25:0]};
+	else if(cp0op == 3'b011)  //syscall
+		next_pc = 30'd0;
+	else if(cp0op == 3'b100)  //eret
+		next_pc = cp0_pcout;
 	else
 		next_pc = cur_pc+1;
 end

@@ -6,6 +6,8 @@ module decoder(
 	rd,
 	shamt,
 	func,
+	cs,
+	sel,
 	immediate,
 	target
 );
@@ -15,6 +17,8 @@ output reg[5:0] op;
 output reg[4:0] rs;
 output reg[4:0] rt;
 output reg[4:0] rd;
+output reg[4:0] cs;
+output reg[2:0] sel;
 output reg[4:0] shamt;
 output reg[5:0] func;
 output reg[15:0] immediate;
@@ -25,6 +29,8 @@ initial begin
 	rs = 5'b00000;
 	rt = 5'b00000;
 	rd = 5'b00000;
+	cs = 5'b00000;
+	sel = 3'b000;
 end
 
 always@(*)
@@ -37,6 +43,8 @@ begin
 	func = ir[5:0];
 	immediate = ir[15:0];
 	target = ir[25:0];
+	cs = ir[15:11];
+	sel = ir[2:0];
 end
 
 endmodule

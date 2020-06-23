@@ -11,20 +11,20 @@ initial begin
 end
 
 always@(*) begin
-	if((mem_regWr == 1||mem_memtoreg==1) && mem_rw != 0 && mem_rw == id_rs)
+	if((mem_regWr == 1) && mem_rw != 0 && mem_rw == id_rs)
 		branchforwardA = 2'b10;
 	else if(ex_regWr == 1 && ex_rw != 0 && ex_rw == id_rs)
 		branchforwardA = 2'b01;
-	else if((wr_regWr == 1||wr_memtoreg==1) && wr_rw != 0 && wr_rw == id_rs)
+	else if((wr_regWr == 1) && wr_rw != 0 && wr_rw == id_rs)
 		branchforwardA = 2'b11;
 	else
 		branchforwardA = 2'b00;
 	
-	if((mem_regWr == 1||mem_memtoreg==1) && mem_rw != 0 && mem_rw == id_rt)
+	if((mem_regWr == 1) && mem_rw != 0 && mem_rw == id_rt)
 		branchforwardB = 2'b10;
 	else if(ex_regWr == 1 && ex_rw != 0 && ex_rw == id_rt)
 		branchforwardB = 2'b01;
-	else if((wr_regWr == 1||wr_memtoreg==1) && wr_rw != 0 && wr_rw == id_rt)
+	else if((wr_regWr == 1) && wr_rw != 0 && wr_rw == id_rt)
 		branchforwardB = 2'b11;
 	else
 		branchforwardB = 2'b00;
