@@ -6,7 +6,7 @@ module mips(clk,rst);
 	wire[31:0] if_ins;
 
 	wire branch_beq,branch_bne,bgez,blez,bgtz,bltz,zbgez,zbgtz,zbeq,zbne,jump,jal,jalr;
-	wire branchbubble,r31Wr;
+	wire branchbubble,id_r31Wr;
 	wire[1:0] branchforwardA,branchforwardB,jalforward;
 	wire[31:0] id_ins;
 	wire[29:0] id_PC_plus_4,id_cp0_pcout,id_cp0_pcoutmux;
@@ -24,7 +24,7 @@ module mips(clk,rst);
 	wire[4:0] id_aluop;
 	wire[5:0] id_op;
 	//ex
-	wire ex_zero,ex_overflow;
+	wire ex_zero,ex_overflow,ex_r31Wr;
 	wire[31:0] ex_result,ex_busA,ex_busB,ex_forwardbusB,ex_HL,ex_busA_mux2,ex_busB_mux2,ex_cp0_dout;
 	wire[4:0] ex_ra,ex_rb,ex_rw,ex_rw_mux2,ex_shamt,ex_cs;
 	wire[63:0] ex_mult;
@@ -79,9 +79,9 @@ module mips(clk,rst);
 
 	decoder decoder(id_ins,id_op,id_ra,id_rb,id_rw,id_shamt,id_func,id_cs,id_sel,id_imm16,id_target);
 
-	Control ctr(id_op,id_rb,id_ra,id_func,id_regWr,id_multWr,id_Lowin,id_Highin,id_hlsel,id_regDst,id_Extop,id_alusrc,id_aluop,id_memWr,id_memtoreg,id_checkover,id_jump,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,id_jalr,id_jal,r31Wr,id_cp0op);
+	Control ctr(id_op,id_rb,id_ra,id_func,id_regWr,id_multWr,id_Lowin,id_Highin,id_hlsel,id_regDst,id_Extop,id_alusrc,id_aluop,id_memWr,id_memtoreg,id_checkover,id_jump,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,id_jalr,id_jal,id_r31Wr,id_cp0op);
 
-	regfile rf(clk,id_ra,id_rb,wr_rw,wr_op,wr_cp0op,wr_cp0_dout,wr_result[11:0],wr_regWr,r31Wr,wr_multWr,id_PC_plus_4,wr_Lowin,wr_Highin,wr_busW,wr_mult,id_busA,id_busB,id_Highout,id_Lowout,jalpc1);
+	regfile rf(clk,id_ra,id_rb,wr_rw,wr_op,wr_cp0op,wr_cp0_dout,wr_result[11:0],wr_regWr,ex_r31Wr,wr_multWr,id_PC_plus_4,wr_Lowin,wr_Highin,wr_busW,wr_mult,id_busA,id_busB,id_Highout,id_Lowout,jalpc1);
 	
 	SignExt SignExt(id_imm16,id_Extop,id_imm32);
 
@@ -103,8 +103,8 @@ module mips(clk,rst);
 
 	branchbubble branchbubble1(id_ra,id_rb,ex_regWr,ex_rw_mux2,ex_memtoreg,mem_regWr,mem_memtoreg,mem_rw,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,branchbubble);
 
-	id_ex idexreg(clk,hazard,cp0bubble,branchbubble,id_busA,id_busA_mux2,id_busB,id_busB_mux2,id_HL_mux4,id_ra,id_rb,id_rw,id_imm32,id_regWr,id_multWr,id_regDst,id_alusrc,id_memWr,id_memtoreg,id_checkover,id_aluop,id_shamt,id_op,id_Lowin,id_Highin,id_cp0op,id_cs,id_sel,id_cp0_doutmux,id_cp0_pcoutmux,id_branch_beq,id_branch_bne,id_bltz,id_blez,id_bgez,id_bgtz,id_jalr,id_jal,id_jump,id_jalpc,id_target,
-					ex_busA,ex_busA_mux2,ex_busB,ex_busB_mux2,ex_HL,ex_ra,ex_rb,ex_rw,ex_imm32,ex_regWr,ex_multWr,ex_regDst,ex_alusrc,ex_memwr,ex_memtoreg,ex_checkover,ex_aluop,ex_shamt,ex_op,ex_Lowin,ex_Highin,ex_cp0op,ex_cs,ex_sel,ex_cp0_dout,ex_cp0_pcout,ex_branch_beq,ex_branch_bne,ex_bltz,ex_blez,ex_bgez,ex_bgtz,ex_jalr,ex_jal,ex_jump,ex_jalpc,ex_target);
+	id_ex idexreg(clk,hazard,cp0bubble,branchbubble,id_busA,id_busA_mux2,id_busB,id_busB_mux2,id_HL_mux4,id_ra,id_rb,id_rw,id_imm32,id_regWr,id_multWr,id_regDst,id_alusrc,id_memWr,id_memtoreg,id_checkover,id_aluop,id_shamt,id_op,id_Lowin,id_Highin,id_cp0op,id_cs,id_sel,id_cp0_doutmux,id_cp0_pcoutmux,id_branch_beq,id_branch_bne,id_bltz,id_blez,id_bgez,id_bgtz,id_jalr,id_jal,id_jump,id_jalpc,id_target,id_r31Wr,
+					ex_busA,ex_busA_mux2,ex_busB,ex_busB_mux2,ex_HL,ex_ra,ex_rb,ex_rw,ex_imm32,ex_regWr,ex_multWr,ex_regDst,ex_alusrc,ex_memwr,ex_memtoreg,ex_checkover,ex_aluop,ex_shamt,ex_op,ex_Lowin,ex_Highin,ex_cp0op,ex_cs,ex_sel,ex_cp0_dout,ex_cp0_pcout,ex_branch_beq,ex_branch_bne,ex_bltz,ex_blez,ex_bgez,ex_bgtz,ex_jalr,ex_jal,ex_jump,ex_jalpc,ex_target,ex_r31Wr);
 
 	wire[31:0] alu3;
 	cp0toalu cp0toalu1(ex_ra,ex_rb,mem_rw,mem_cp0op,mem_cp0_dout,wr_rw,wr_cp0op,wr_cp0_dout,alu3);

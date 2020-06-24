@@ -217,7 +217,7 @@ begin
 		6'b000011: begin  //jal
 			Extop = 1;  //have nothing to do with
 			regDst = 0;  //have nothing to do with
-			regWr = 1;
+			regWr = 0;
 			multWr = 0;
 			hlsel = 0;
 			alusrc = 0;  //have nothing to do with
@@ -946,7 +946,7 @@ begin
 				6'b001001: begin  //jalr
 				Extop = 1;  //have nothing to do with
 				regDst = 1;
-				regWr = 1;
+				regWr = 0;
 				multWr = 0;
 				hlsel = 0;
 				alusrc = 0;

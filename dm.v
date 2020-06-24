@@ -28,18 +28,26 @@ always@(negedge clk) begin
 		begin
 		if(op == 6'b101000)
 		begin
-		if(Addr[1:0] == 2'b00)
+		if(Addr[1:0] == 2'b00) begin
 			dm[Addr[11:2]][7:0] = DataIn[7:0];
-		else if(Addr[1:0] == 2'b01)
+			$display("%h->dm[%h][7:0]",DataIn[7:0],Addr[11:0]);
+		end
+		else if(Addr[1:0] == 2'b01) begin
 			dm[Addr[11:2]][15:8] = DataIn[7:0];
-		else if(Addr[1:0] == 2'b10)
+			$display("%h->dm[%h][15:8]",DataIn[7:0],Addr[11:0]);
+		end
+		else if(Addr[1:0] == 2'b10) begin
 			dm[Addr[11:2]][23:16] = DataIn[7:0];
+			$display("%h->dm[%h][23:16]",DataIn[7:0],Addr[11:0]);
+		end
 		else if(Addr[1:0] == 2'b11)
 			dm[Addr[11:2]][31:24] = DataIn[7:0];
+			$display("%h->dm[%h][31:24]",DataIn[7:0],Addr[11:0]);
 		end
 		else
 		begin
 			dm[Addr[11:2]] = DataIn;
+			$display("%h->dm[%h]",DataIn,Addr[11:0]);
 		end
 		end
 end
