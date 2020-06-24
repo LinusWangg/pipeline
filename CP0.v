@@ -1,7 +1,7 @@
-module CP0(clk,cs,sel,busB,PC,cp0_dout,cp0_pcout,wr_cp0op,id_cp0op);
+module CP0(clk,id_cs,id_sel,wr_cs,wr_sel,busB,PC,cp0_dout,cp0_pcout,wr_cp0op,id_cp0op);
 input wire clk;
-input wire[4:0] cs;
-input wire[2:0] sel,wr_cp0op,id_cp0op;
+input wire[4:0] id_cs,wr_cs;
+input wire[2:0] id_sel,wr_sel,wr_cp0op,id_cp0op;
 input wire[31:0] busB;
 input wire[29:0] PC;
 output reg[31:0] cp0_dout,cp0_pcout;
@@ -16,16 +16,14 @@ initial begin
 	cp0_pcout = 30'd0;
 end
 
-wire[7:0] addr = {cs,sel};
-
 always@(negedge clk) begin
 	if(wr_cp0op == 3'b010)
-		cp0[addr] = busB;
+		cp0[{wr_cs,wr_sel}] = busB;
 end
 
 always@(*) begin
 	if(id_cp0op == 3'b001)
-		cp0_dout = cp0[addr];
+		cp0_dout = cp0[{id_cs,id_sel}];
 	if(id_cp0op == 3'b011) begin
 		cp0[112] = {PC,2'b0};
 		cp0[104][6:2] = 5'b01000;

@@ -1,7 +1,7 @@
-module mem_wr(clk,mem_dout,mem_HL,mem_result,mem_mult,mem_busA_mux2,mem_rw,mem_regWr,mem_multWr,mem_memtoreg,mem_op,mem_Lowin,mem_Highin,mem_cp0op,mem_cs,mem_sel,mem_cp0_dout,
-	wr_dout,wr_HL,wr_result,wr_mult,wr_busA_mux2,wr_rw,wr_regWr,wr_multWr,wr_memtoreg,wr_op,wr_Lowin,wr_Highin,wr_cp0op,wr_cs,wr_sel,wr_cp0_dout);
+module mem_wr(clk,mem_dout,mem_HL,mem_result,mem_mult,mem_busA_mux2,mem_busB_mux2,mem_rw,mem_regWr,mem_multWr,mem_memtoreg,mem_op,mem_Lowin,mem_Highin,mem_cp0op,mem_cs,mem_sel,mem_cp0_dout,
+	wr_dout,wr_HL,wr_result,wr_mult,wr_busA_mux2,wr_busB_mux2,wr_rw,wr_regWr,wr_multWr,wr_memtoreg,wr_op,wr_Lowin,wr_Highin,wr_cp0op,wr_cs,wr_sel,wr_cp0_dout);
 input wire clk;
-input wire[31:0] mem_dout,mem_result,mem_HL,mem_busA_mux2,mem_cp0_dout;
+input wire[31:0] mem_dout,mem_result,mem_HL,mem_busA_mux2,mem_cp0_dout,mem_busB_mux2;
 input wire[63:0] mem_mult;
 input wire[4:0] mem_rw,mem_cs;
 input wire mem_regWr,mem_multWr,mem_Lowin,mem_Highin;
@@ -9,7 +9,7 @@ input wire[1:0] mem_memtoreg;
 input wire[5:0] mem_op;
 input wire[2:0] mem_cp0op,mem_sel;
 
-output reg[31:0] wr_dout,wr_result,wr_HL,wr_busA_mux2,wr_cp0_dout;
+output reg[31:0] wr_dout,wr_result,wr_HL,wr_busA_mux2,wr_cp0_dout,wr_busB_mux2;
 output reg[63:0] wr_mult;
 output reg[4:0] wr_rw,wr_cs;
 output reg wr_regWr,wr_multWr,wr_Lowin,wr_Highin;
@@ -33,6 +33,8 @@ initial begin
 	wr_sel = 3'd0;
 	wr_cs = 5'd0;
 	wr_cp0_dout = 32'd0;
+	wr_busB_mux2 = 32'd0;
+	wr_mult = 64'd0;
 end
 
 always@(posedge clk)
@@ -53,6 +55,7 @@ begin
 	wr_sel = mem_sel;
 	wr_cs = mem_cs;
 	wr_cp0_dout = mem_cp0_dout;
+	wr_busB_mux2 = mem_busB_mux2;
 end
 endmodule
 

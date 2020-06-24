@@ -10,7 +10,7 @@ module mips(clk,rst);
 	wire[1:0] branchforwardA,branchforwardB,jalforward;
 	wire[31:0] id_ins;
 	wire[29:0] id_PC_plus_4,id_cp0_pcout;
-	wire[31:0] id_busA,id_busA_mux2,id_busB,id_busB_mux2,mem_forward,wr_forward,id_Highout,id_Lowout,id_HL,id_HL_mux4,id_cp0_dout;
+	wire[31:0] id_busA,id_busA_mux2,id_busB,id_busB_mux2,mem_forward,wr_forward,id_Highout,id_Lowout,id_HL,id_HL_mux4,id_cp0_dout,id_cp0_doutmux;
 	wire[4:0] id_ra,id_rb,id_rw,id_cs;
 	wire[31:0] id_imm32;
 	wire[15:0] id_imm16;
@@ -37,7 +37,7 @@ module mips(clk,rst);
 	
 	wire[31:0] ex_imm32,ex_alu_busA,ex_alu_busA_mux2,ex_alu_busB;
 	//mem
-	wire[31:0] mem_Dataout,mem_HL,mem_busA_mux2,mem_cp0_dout;
+	wire[31:0] mem_Dataout,mem_HL,mem_busA_mux2,mem_cp0_dout,mem_busB_mux2;
 	wire[31:0] mem_result;
 	wire[63:0] mem_mult;
 	wire[4:0] mem_rw,mem_cs;
@@ -49,7 +49,7 @@ module mips(clk,rst);
 	wire[5:0] mem_op;
 	//wr
 	wire[31:0] wr_Dataout;
-	wire[31:0] wr_result,wr_HL,wr_busA_mux2,wr_cp0_dout;
+	wire[31:0] wr_result,wr_HL,wr_busA_mux2,wr_busB_mux2,wr_cp0_dout;
 	wire[63:0] wr_mult;
 	wire[4:0] wr_rw,wr_cs;
 	wire[31:0] wr_busW;
@@ -64,13 +64,13 @@ module mips(clk,rst);
 
 	wire hazard;
 
-	pc get_pc(clk,NPC,rst,PC,hazard,branchbubble);
+	//pc get_pc(clk,NPC,rst,PC,hazard,branchbubble);
 
 	jalforward jalforward1(id_ra,ex_rw_mux2,ex_regWr,ex_result,mem_rw,mem_regWr,mem_result,wr_rw,wr_regWr,wr_result,jalforward);
 	
 	mux4 mux_jalpc(jalpc1,ex_result[31:2],mem_result[31:2],wr_result[31:2],jalforward,id_jalpc);
 	
-	npc get_npc(PC,ex_target,ex_imm32[15:0],ex_jalpc,ex_cp0op,ex_cp0_pcout,ex_branch_beq,ex_branch_bne,ex_bgez,ex_bgtz,ex_blez,ex_bltz,zbgez,zbgtz,zbeq,zbne,ex_jalr,ex_jal,mem_zero,ex_jump,NPC);
+	npc get_npc(clk,rst,hazard,branchbubble,PC,ex_target,ex_imm32[15:0],ex_jalpc,id_cp0op,id_cp0_pcout,ex_branch_beq,ex_branch_bne,ex_bgez,ex_bgtz,ex_blez,ex_bltz,zbgez,zbgtz,zbeq,zbne,ex_jalr,ex_jal,mem_zero,ex_jump,PC);
 	assign PC_plus_4 = PC+1;
 	im_4k get_im(PC[9:0],if_ins);
 
@@ -86,7 +86,7 @@ module mips(clk,rst);
 
 	mux_rw mux_rw(ex_rb,ex_rw,ex_regDst,ex_rw_mux2);
 	
-	HazardUnit hazard1(ex_&ex_regWr,ex_rw_mux2,id_ra,id_rb,hazard);
+	HazardUnit hazard1(ex_memtoreg,ex_regWr,ex_rw_mux2,id_ra,id_rb,hazard);
 
 	branchforward branchforward(id_ra,id_rb,ex_rw_mux2,ex_regWr,mem_rw,mem_regWr,mem_memtoreg,wr_rw,wr_regWr,wr_memtoreg,branchforwardA,branchforwardB);
 
@@ -102,24 +102,27 @@ module mips(clk,rst);
 
 	branchbubble branchbubble1(id_ra,id_rb,ex_regWr,ex_rw_mux2,ex_memtoreg,mem_regWr,mem_memtoreg,mem_rw,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,branchbubble);
 
-	id_ex idexreg(clk,hazard,branchbubble,id_busA,id_busA_mux2,id_busB,id_busB_mux2,id_HL_mux4,id_ra,id_rb,id_rw,id_imm32,id_regWr,id_multWr,id_regDst,id_alusrc,id_memWr,id_memtoreg,id_checkover,id_aluop,id_shamt,id_op,id_Lowin,id_Highin,id_cp0op,id_cs,id_sel,id_cp0_dout,id_cp0_pcout,id_branch_beq,id_branch_bne,id_bltz,id_blez,id_bgez,id_bgtz,id_jalr,id_jal,id_jump,id_jalpc,id_target,
+	id_ex idexreg(clk,hazard,branchbubble,id_busA,id_busA_mux2,id_busB,id_busB_mux2,id_HL_mux4,id_ra,id_rb,id_rw,id_imm32,id_regWr,id_multWr,id_regDst,id_alusrc,id_memWr,id_memtoreg,id_checkover,id_aluop,id_shamt,id_op,id_Lowin,id_Highin,id_cp0op,id_cs,id_sel,id_cp0_doutmux,id_cp0_pcout,id_branch_beq,id_branch_bne,id_bltz,id_blez,id_bgez,id_bgtz,id_jalr,id_jal,id_jump,id_jalpc,id_target,
 					ex_busA,ex_busA_mux2,ex_busB,ex_busB_mux2,ex_HL,ex_ra,ex_rb,ex_rw,ex_imm32,ex_regWr,ex_multWr,ex_regDst,ex_alusrc,ex_memwr,ex_memtoreg,ex_checkover,ex_aluop,ex_shamt,ex_op,ex_Lowin,ex_Highin,ex_cp0op,ex_cs,ex_sel,ex_cp0_dout,ex_cp0_pcout,ex_branch_beq,ex_branch_bne,ex_bltz,ex_blez,ex_bgez,ex_bgtz,ex_jalr,ex_jal,ex_jump,ex_jalpc,ex_target);
 
-	forwardunit forwardunit(ex_ra,ex_rb,mem_rw,mem_regWr,wr_rw,wr_regWr,forwardA,forwardB);
+	wire[31:0] alu3;
+	cp0toalu cp0toalu1(ex_ra,ex_rb,mem_rw,mem_cp0op,mem_cp0_dout,wr_rw,wr_cp0op,wr_cp0_dout,alu3);
 
-	mux3 mux_alubusA(ex_busA,wr_busW,mem_result,forwardA,ex_alu_busA);
+	forwardunit forwardunit(ex_ra,ex_rb,mem_rw,mem_regWr,mem_cp0op,wr_rw,wr_regWr,wr_cp0op,forwardA,forwardB);
+
+	mux4 mux_alubusA(ex_busA,wr_busW,mem_result,alu3,forwardA,ex_alu_busA);
 	
-	mux3 mux_alubusB(ex_busB,wr_busW,mem_result,forwardB,ex_forwardbusB);
+	mux4 mux_alubusB(ex_busB,wr_busW,mem_result,alu3,forwardB,ex_forwardbusB);
 	
 	mux_memtoreg mux_alusrc_to_busB(ex_forwardbusB,ex_imm32,ex_alusrc,ex_alu_busB);
 
 	alu alu(ex_checkover,ex_aluop,ex_shamt,ex_alu_busA,ex_alu_busB,ex_zero,ex_overflow,ex_result,ex_mult);
 	
-	ex_mem exmemreg(clk,ex_zero,ex_HL,ex_result,ex_mult,ex_busA_mux2,ex_forwardbusB,ex_rw_mux2,ex_regWr,ex_multWr,ex_memwr,ex_memtoreg,ex_op,ex_Lowin,ex_Highin,ex_cp0op,ex_cs,ex_sel,ex_cp0_dout,mem_zero,mem_HL,mem_result,mem_mult,mem_busA_mux2,mem_busB,mem_rw,mem_regWr,mem_multWr,mem_memWr,mem_memtoreg,mem_op,mem_Lowin,mem_Highin,mem_cp0op,mem_cs,mem_sel,mem_cp0_dout);
+	ex_mem exmemreg(clk,ex_zero,ex_HL,ex_result,ex_mult,ex_busA_mux2,ex_busB_mux2,ex_forwardbusB,ex_rw_mux2,ex_regWr,ex_multWr,ex_memwr,ex_memtoreg,ex_op,ex_Lowin,ex_Highin,ex_cp0op,ex_cs,ex_sel,ex_cp0_dout,mem_zero,mem_HL,mem_result,mem_mult,mem_busA_mux2,mem_busB_mux2,mem_busB,mem_rw,mem_regWr,mem_multWr,mem_memWr,mem_memtoreg,mem_op,mem_Lowin,mem_Highin,mem_cp0op,mem_cs,mem_sel,mem_cp0_dout);
 	
 	dm_4k dm_4k(clk,mem_op,mem_memWr,mem_result[11:0],mem_busB,mem_Dataout);
 
-	mem_wr mem_wr(clk,mem_Dataout,mem_HL,mem_result,mem_mult,mem_busA_mux2,mem_rw,mem_regWr,mem_multWr,mem_memtoreg,mem_op,mem_Lowin,mem_Highin,mem_cp0op,mem_cs,mem_sel,mem_cp0_dout,wr_Dataout,wr_HL,wr_result,wr_mult,wr_busA_mux2,wr_rw,wr_regWr,wr_multWr,wr_memtoreg,wr_op,wr_Lowin,wr_Highin,wr_cp0op,wr_cs,wr_sel,wr_cp0_dout);
+	mem_wr mem_wr(clk,mem_Dataout,mem_HL,mem_result,mem_mult,mem_busA_mux2,mem_busB_mux2,mem_rw,mem_regWr,mem_multWr,mem_memtoreg,mem_op,mem_Lowin,mem_Highin,mem_cp0op,mem_cs,mem_sel,mem_cp0_dout,wr_Dataout,wr_HL,wr_result,wr_mult,wr_busA_mux2,wr_busB_mux2,wr_rw,wr_regWr,wr_multWr,wr_memtoreg,wr_op,wr_Lowin,wr_Highin,wr_cp0op,wr_cs,wr_sel,wr_cp0_dout);
 
 	mux4 mux(wr_result,wr_Dataout,wr_HL,wr_busA_mux2,wr_memtoreg,wr_busW);
 
@@ -131,5 +134,7 @@ module mips(clk,rst);
 
 	cp0forwardUnit cp0forwardd(id_cp0op,id_cs,id_sel,ex_cs,ex_sel,ex_cp0op,mem_cs,mem_sel,mem_cp0op,wr_cs,wr_sel,wr_cp0op,cp0forward);
 
-	CP0 cp0(clk,wr_cs,wr_sel,id_busB_mux2,id_PC_plus_4-1,id_cp0_dout,id_cp0_pcout,wr_cp0op,id_cp0op);
+	CP0 cp0(clk,id_cs,id_sel,wr_cs,wr_sel,wr_busB_mux2,id_PC_plus_4-1,id_cp0_dout,id_cp0_pcout,wr_cp0op,id_cp0op);
+
+	mux4 mux_cp0dout(id_cp0_dout,ex_cp0_dout,mem_cp0_dout,wr_cp0_dout,cp0forward,id_cp0_doutmux);
 endmodule

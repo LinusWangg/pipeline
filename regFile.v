@@ -27,10 +27,10 @@ input wire[2:0] cp0op;
 input wire[4:0] rs,rt,rw;
 input wire[5:0] op;
 input wire[11:0] addr;
-input wire[31:0] busW;
+input wire[31:0] busW,cp0_dout;
 input wire[63:0] busmult;
 input wire[29:0] r31;
-output reg[31:0] busA,busB,Highout,Lowout,cp0_dout;
+output reg[31:0] busA,busB,Highout,Lowout;
 output reg[29:0] jalpc;
 
 reg [31:0]registers[31:0];
