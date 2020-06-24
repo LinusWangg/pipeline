@@ -1,4 +1,4 @@
-module ex_mem(clk,ex_zero,ex_HL,ex_result,ex_mult,ex_busA_mux2,ex_busB_mux2,ex_busB,ex_rw,ex_regWr,ex_multWr,ex_memwr,ex_memtoreg,ex_op,ex_Lowin,ex_Highin,ex_cp0op,ex_cs,ex_sel,ex_cp0_dout,
+module ex_mem(clk,cp0bubble,ex_zero,ex_HL,ex_result,ex_mult,ex_busA_mux2,ex_busB_mux2,ex_busB,ex_rw,ex_regWr,ex_multWr,ex_memwr,ex_memtoreg,ex_op,ex_Lowin,ex_Highin,ex_cp0op,ex_cs,ex_sel,ex_cp0_dout,
 	mem_zero,mem_HL,mem_result,mem_mult,mem_busA_mux2,mem_busB_mux2,mem_busB,mem_rw,mem_regWr,mem_multWr,mem_memwr,mem_memtoreg,mem_op,mem_Lowin,mem_Highin,mem_cp0op,mem_cs,mem_sel,mem_cp0_dout);
 
 input wire clk;
@@ -7,7 +7,7 @@ input wire[31:0] ex_result,ex_busB,ex_HL,ex_busA_mux2,ex_cp0_dout,ex_busB_mux2;
 input wire[63:0] ex_mult;
 input wire[4:0] ex_rw,ex_cs;
 input wire ex_regWr,ex_memwr,ex_multWr,ex_Lowin,ex_Highin;
-input wire[1:0] ex_memtoreg;
+input wire[1:0] ex_memtoreg,cp0bubble;
 input wire[5:0] ex_op;
 input wire[2:0] ex_cp0op,ex_sel;
 
@@ -45,6 +45,10 @@ end
 
 always@(posedge clk)
 begin
+	if(cp0bubble == 2) begin
+		mem_cp0op = 3'd0;
+	end
+	else begin
 	mem_HL = ex_HL;
 	mem_result = ex_result;
 	mem_mult = ex_mult;
@@ -64,6 +68,7 @@ begin
 	mem_cs = ex_cs;
 	mem_cp0_dout = ex_cp0_dout;
 	mem_busB_mux2 = ex_busB_mux2;
+	end
 end
 
 endmodule

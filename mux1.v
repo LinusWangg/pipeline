@@ -30,6 +30,14 @@ module mux4(C1,C2,C3,C4,s,y);
 	assign y=(s==2'b00)?C1:(s==2'b01)?C2:(s==2'b10)?C3:C4;
 endmodule
 
+module mux4pc(C1,C2,C3,C4,s,y);
+	input wire[29:0] C1,C2,C3,C4;
+	input wire[1:0] s;
+	output wire[29:0] y;
+
+	assign y=(s==2'b00)?C1:(s==2'b01)?C2:(s==2'b10)?C3:C4;
+endmodule
+
 module muxHL(C1,C2,C3,C4,s,hlsel,y);
 	input wire[31:0] C1;
 	input wire[63:0] C2,C3,C4;

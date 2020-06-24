@@ -19,11 +19,7 @@ end
 always@(negedge clk) begin
 	if(wr_cp0op == 3'b010)
 		cp0[{wr_cs,wr_sel}] = busB;
-end
 
-always@(*) begin
-	if(id_cp0op == 3'b001)
-		cp0_dout = cp0[{id_cs,id_sel}];
 	if(id_cp0op == 3'b011) begin
 		cp0[112] = {PC,2'b0};
 		cp0[104][6:2] = 5'b01000;
@@ -33,6 +29,12 @@ always@(*) begin
 	if(id_cp0op == 3'b100)  begin
 		cp0[96][1] = 0;
 	end
+end
+
+always@(*) begin
+	if(id_cp0op == 3'b001)
+		cp0_dout = cp0[{id_cs,id_sel}];
+
 
 	cp0_pcout = cp0[112];
 end

@@ -8,11 +8,11 @@ initial begin
 end
 
 always@(*) begin
-	if((id_cp0op==3'b001&&ex_cp0op==3'b010&&id_cs==ex_cs&&id_sel==ex_sel)||(id_cp0op==3'b100&&ex_cp0op==3'b010&&id_cs==14&&id_sel==0))
+	if((id_cp0op==3'b001&&ex_cp0op==3'b010&&id_cs==ex_cs&&id_sel==ex_sel)||(id_cp0op==3'b100&&ex_cp0op==3'b010&&ex_cs==14&&ex_sel==0))
 		cp0forward = 2'b01;
-	else if((id_cp0op==3'b001&&mem_cp0op==3'b010&&ex_cp0op!=3'b11&&id_cs==mem_cs&&id_sel==mem_sel)||(id_cp0op==3'b100&&mem_cp0op==3'b010&&id_cs==14&&id_sel==0))
+	else if((id_cp0op==3'b001&&mem_cp0op==3'b010&&ex_cp0op!=3'b11&&id_cs==mem_cs&&id_sel==mem_sel)||(id_cp0op==3'b100&&mem_cp0op==3'b010&&mem_cs==14&&mem_sel==0))
 		cp0forward = 2'b10;
-	else if((id_cp0op==3'b001&&wr_cp0op==3'b010&&ex_cp0op!=3'b11&&id_cs==wr_cs&&id_sel==wr_sel)||(id_cp0op==3'b100&&wr_cp0op==3'b010&&id_cs==14&&id_sel==0))
+	else if((id_cp0op==3'b001&&wr_cp0op==3'b010&&ex_cp0op!=3'b11&&id_cs==wr_cs&&id_sel==wr_sel)||(id_cp0op==3'b100&&wr_cp0op==3'b010&&mem_cs==14&&mem_sel==0))
 		cp0forward = 2'b11;
 	else
 		cp0forward = 2'b00;
