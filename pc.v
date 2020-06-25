@@ -9,7 +9,7 @@ module pc(
 input wire clk,rst,Hazard,BranchBubble;
 input wire[29:0] adin;
 output reg[29:0] adout;
-wire[31:0] temp = 32'h00003034;
+wire[31:0] temp = 32'h00000000;
 initial begin
 	adout=temp[31:2];
 end

@@ -1,3 +1,4 @@
+
 module mips(clk,rst);
 	input clk;
 	input rst;
@@ -10,7 +11,7 @@ module mips(clk,rst);
 	wire[1:0] branchforwardA,branchforwardB,jalforward;
 	wire[31:0] id_ins;
 	wire[29:0] id_PC_plus_4,id_cp0_pcout,id_cp0_pcoutmux;
-	wire[31:0] id_busA,id_busA_mux2,id_busB,id_busB_mux2,mem_forward,wr_forward,id_Highout,id_Lowout,id_HL,id_HL_mux4,id_cp0_dout,id_cp0_doutmux;
+	wire[31:0] id_busA,id_busA_mux2,id_busB,id_busB_mux2,mem_forward,wr_forward,id_Highout,id_Lowout,id_HL,id_Highoutmux4,id_Lowoutmux4,id_HL_mux4,id_cp0_dout,id_cp0_doutmux;
 	wire[4:0] id_ra,id_rb,id_rw,id_cs;
 	wire[31:0] id_imm32;
 	wire[15:0] id_imm16;
@@ -40,7 +41,7 @@ module mips(clk,rst);
 	wire[31:0] mem_Dataout,mem_HL,mem_busA_mux2,mem_cp0_dout,mem_busB_mux2;
 	wire[31:0] mem_result;
 	wire[63:0] mem_mult;
-	wire[4:0] mem_rw,mem_cs;
+	wire[4:0] mem_rw,mem_cs,mem_ra;
 	wire[31:0] mem_busB;
 	wire[2:0] mem_sel,mem_cp0op;
 
@@ -51,7 +52,7 @@ module mips(clk,rst);
 	wire[31:0] wr_Dataout;
 	wire[31:0] wr_result,wr_HL,wr_busA_mux2,wr_busB_mux2,wr_cp0_dout;
 	wire[63:0] wr_mult;
-	wire[4:0] wr_rw,wr_cs;
+	wire[4:0] wr_rw,wr_cs,wr_ra;
 	wire[31:0] wr_busW;
 	wire[5:0] wr_op;
 	wire[2:0] wr_cp0op,wr_sel;
@@ -127,7 +128,7 @@ module mips(clk,rst);
 
 	mux4 mux(wr_result,wr_Dataout,wr_HL,wr_busA_mux2,wr_memtoreg,wr_busW);
 
-	mux_memtoreg muxHL(id_Lowout,id_Highout,id_hlsel,id_HL);
+	mux_memtoreg muxHL(id_Lowoutmux4,id_Highoutmux4,id_hlsel,id_HL);
 
 	multforward multforward1(id_multWr,ex_multWr,mem_multWr,wr_multWr,multforward);
 
@@ -142,4 +143,11 @@ module mips(clk,rst);
 	mux4pc mux_cp0(id_cp0_pcout,ex_busB_mux2[31:2],mem_busB_mux2[31:2],wr_busB_mux2[31:2],cp0forward,id_cp0_pcoutmux);
 
 	cp0bubble cp0bubble1(clk,id_cp0op,ex_cs,ex_sel,ex_cp0op,mem_cs,mem_sel,mem_cp0op,wr_cs,wr_sel,wr_cp0op,cp0bubble);
+
+	wire[1:0]forwardHigh,forwardLow;
+	HLforward HLforward1(ex_Highin,ex_Lowin,mem_Highin,mem_Lowin,wr_Highin,wr_lowin,forwardHigh,forwardLow);
+
+	mux4 muxHighout(id_Highout,ex_busA_mux2,mem_busA_mux2,wr_busA_mux2,forwardHigh,id_Highoutmux4);
+
+	mux4 muxLowout(id_Lowout,ex_busA_mux2,mem_busA_mux2,wr_busA_mux2,forwardLow,id_Lowoutmux4);
 endmodule
