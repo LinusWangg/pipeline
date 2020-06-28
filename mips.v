@@ -108,9 +108,9 @@ module mips(clk,rst);
 					ex_busA,ex_busA_mux2,ex_busB,ex_busB_mux2,ex_HL,ex_ra,ex_rb,ex_rw,ex_imm32,ex_regWr,ex_multWr,ex_regDst,ex_alusrc,ex_memwr,ex_memtoreg,ex_checkover,ex_aluop,ex_shamt,ex_op,ex_Lowin,ex_Highin,ex_cp0op,ex_cs,ex_sel,ex_cp0_dout,ex_cp0_pcout,ex_branch_beq,ex_branch_bne,ex_bltz,ex_blez,ex_bgez,ex_bgtz,ex_jalr,ex_jal,ex_jump,ex_jalpc,ex_target,ex_r31Wr);
 
 	wire[31:0] alu3;
-	cp0toalu cp0toalu1(ex_ra,ex_rb,mem_rw,mem_cp0op,mem_cp0_dout,wr_rw,wr_cp0op,wr_cp0_dout,alu3);
+	cp0HLtoalu cp0HLtoalu1(ex_ra,ex_rb,mem_rw,mem_cp0op,mem_memtoreg,mem_regWr,mem_cp0_dout,mem_HL,wr_rw,wr_cp0op,wr_memtoreg,wr_regWr,wr_cp0_dout,wr_HL,alu3);
 
-	forwardunit forwardunit(ex_ra,ex_rb,mem_rw,mem_regWr,mem_cp0op,wr_rw,wr_regWr,wr_cp0op,forwardA,forwardB);
+	forwardunit forwardunit(ex_ra,ex_rb,mem_rw,mem_regWr,mem_memtoreg,mem_cp0op,wr_rw,wr_regWr,wr_memtoreg,wr_cp0op,forwardA,forwardB);
 
 	mux4 mux_alubusA(ex_busA,wr_busW,mem_result,alu3,forwardA,ex_alu_busA);
 	
