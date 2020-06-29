@@ -66,12 +66,14 @@ always@(id_branch_bne or id_branch_beq or id_bgez or id_bgtz or id_blez or id_bl
 			next_pc = BHT[i][29:0];
 			branch_predict = next_pc;
 			flag = 1;
+			i = 16;
 		end
 		else if(BHT[i][61]==1&&BHT[i][60:31]==cur_pc-1&&BHT[i][30]==0) begin
 			flag = 1;
 			next_pc = cur_pc+1;
 			branch_predict = next_pc;
 			flag = 1;
+			i = 16;
 		end
 		else if(BHT[i][61]==0) begin
 			flag = 0;
@@ -81,7 +83,7 @@ always@(id_branch_bne or id_branch_beq or id_bgez or id_bgtz or id_blez or id_bl
 	end
 	if(flag == 0) begin
 		if(id_branch_bne||id_branch_beq||id_bgez||id_bgtz||id_blez||id_bltz) begin
-			next_pc = cur_pc+{14'b0,id_immediate};
+			next_pc = cur_pc+{{14{id_immediate[15]}},id_immediate};
 			branch_predict = next_pc;
 			BHT[t][61] = 1;
 			BHT[t][60:31] = cur_pc-1;
@@ -114,8 +116,8 @@ begin
 		flush = 1;
 	end
 	else if(branch_bne == 1 && !clk)  begin//bne 
-		next_pc = (zbne)?pre_pc-1+{14'b0,immediate}:pre_pc;
-		if(next_pc != branch_predict) begin
+		next_pc = (zbne)?pre_pc-1+{{14{immediate[15]}},immediate}:pre_pc;
+		if(next_pc != branch_predict2) begin
 			for(i=0;i<=15;i=i+1) begin
 				if(BHT[i][61]==1&&BHT[i][60:31]==pre_pc-2) begin
 					BHT[i][30] = !BHT[i][30];
@@ -130,8 +132,8 @@ begin
 		end
 	end
 	else if(branch_beq == 1 && !clk)  begin//beq
-		next_pc = (zbeq)?pre_pc-1+{14'b0,immediate}:pre_pc;
-		if(next_pc != branch_predict) begin
+		next_pc = (zbeq)?pre_pc-1+{{14{immediate[15]}},immediate}:pre_pc;
+		if(next_pc != branch_predict2) begin
 			for(i=0;i<=15;i=i+1) begin
 				if(BHT[i][61]==1&&BHT[i][60:31]==pre_pc-2) begin
 					BHT[i][30] = !BHT[i][30];
@@ -146,8 +148,8 @@ begin
 		end
 	end
 	else if(bgez == 1 && !clk)  begin//bgez
-		next_pc = (zbgez==1)?pre_pc-1+{14'b0,immediate}:pre_pc;
-		if(next_pc != branch_predict) begin
+		next_pc = (zbgez==1)?pre_pc-1+{{14{immediate[15]}},immediate}:pre_pc;
+		if(next_pc != branch_predict2) begin
 			for(i=0;i<=15;i=i+1) begin
 				if(BHT[i][61]==1&&BHT[i][60:31]==pre_pc-2) begin
 					BHT[i][30] = !BHT[i][30];
@@ -162,8 +164,8 @@ begin
 		end
 	end
 	else if(bltz == 1 && !clk)  begin//bltz
-		next_pc = (zbgez==0)?pre_pc-1+{14'b0,immediate}:pre_pc;
-		if(next_pc != branch_predict) begin
+		next_pc = (zbgez==0)?pre_pc-1+{{14{immediate[15]}},immediate}:pre_pc;
+		if(next_pc != branch_predict2) begin
 			for(i=0;i<=15;i=i+1) begin
 				if(BHT[i][61]==1&&BHT[i][60:31]==pre_pc-2) begin
 					BHT[i][30] = !BHT[i][30];
@@ -178,8 +180,8 @@ begin
 		end
 	end
 	else if(bgtz == 1 && !clk)  begin//bgtz
-		next_pc = (zbgtz==1)?pre_pc-1+{14'b0,immediate}:pre_pc;
-		if(next_pc != branch_predict) begin
+		next_pc = (zbgtz==1)?pre_pc-1+{{14{immediate[15]}},immediate}:pre_pc;
+		if(next_pc != branch_predict2) begin
 			for(i=0;i<=15;i=i+1) begin
 				if(BHT[i][61]==1&&BHT[i][60:31]==pre_pc-2) begin
 					BHT[i][30] = !BHT[i][30];
@@ -194,8 +196,8 @@ begin
 		end
 	end
 	else if(blez == 1 && !clk)  begin//blez
-		next_pc = (zbgtz==0)?pre_pc-1+{14'b0,immediate}:pre_pc;
-		if(next_pc != branch_predict) begin
+		next_pc = (zbgtz==0)?pre_pc-1+{{14{immediate[15]}},immediate}:pre_pc;
+		if(next_pc != branch_predict2) begin
 			for(i=0;i<=15;i=i+1) begin
 				if(BHT[i][61]==1&&BHT[i][60:31]==pre_pc-2) begin
 					BHT[i][30] = !BHT[i][30];
