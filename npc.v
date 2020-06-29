@@ -1,14 +1,19 @@
 module npc(
 	clk,
 	rst,
+	flushbefore,
 	Hazard,
 	Brunchbubble,
 	cur_pc,
+	pre_pc,
+	branch_predict2,
 	target,
+	id_immediate,
 	immediate,
 	jal_pc,
 	cp0op,
 	cp0_pcout,
+	id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,
 	branch_beq,
 	branch_bne,
 	bgez,
@@ -23,55 +28,200 @@ module npc(
 	jal,
 	zero,
 	jump,
-	next_pc
+	next_pc,
+	branch_predict,
+	flush
 );
-input wire clk,rst,Hazard,Brunchbubble;
-input wire[15:0] immediate;
+input wire clk,rst,Hazard,Brunchbubble,flushbefore;
+input wire[15:0] immediate,id_immediate;
 input wire[2:0] cp0op;
 input wire jump;
 input wire zero;  //zero-alu??????
-input wire branch_beq,branch_bne,bgez,bgtz,blez,bltz,jalr,jal,zbgez,zbgtz,zbeq,zbne;
+input wire branch_beq,branch_bne,bgez,bgtz,blez,bltz,jalr,jal,zbgez,zbgtz,zbeq,zbne,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz;
 input wire[25:0] target;
-input wire[29:0] cur_pc;
+input wire[29:0] cur_pc,pre_pc;
 input wire[29:0] jal_pc,cp0_pcout;
 output reg[29:0] next_pc;
+output reg flush;
 wire[31:0] temp = 32'h00003034;
-
-reg [29:0] branch_next;
+input wire[29:0] branch_predict2;
+output reg [29:0] branch_predict;
 wire [29:0] new_immediate;
 reg [29:0] jump_next;
+reg [61:0] BHT[16:0];
+reg flag;
+
+integer i,t;
 initial begin
 	next_pc <= temp[31:2];
+	flush <= 0;
+	for(i=0;i<=15;i=i+1)
+		BHT[i] = 0;
 end
 
-always@(posedge clk or negedge clk)
+always@(id_branch_bne or id_branch_beq or id_bgez or id_bgtz or id_blez or id_bltz) begin
+	for(i=0;i<=15;i=i+1) begin
+		if(BHT[i][61]==1&&BHT[i][60:31]==cur_pc-1&&BHT[i][30]==1) begin
+			flag = 1;
+			next_pc = BHT[i][29:0];
+			branch_predict = next_pc;
+			flag = 1;
+		end
+		else if(BHT[i][61]==1&&BHT[i][60:31]==cur_pc-1&&BHT[i][30]==0) begin
+			flag = 1;
+			next_pc = cur_pc+1;
+			branch_predict = next_pc;
+			flag = 1;
+		end
+		else if(BHT[i][61]==0) begin
+			flag = 0;
+			t = i;
+			i = 16;
+		end
+	end
+	if(flag == 0) begin
+		if(id_branch_bne||id_branch_beq||id_bgez||id_bgtz||id_blez||id_bltz) begin
+			next_pc = cur_pc+{14'b0,id_immediate};
+			branch_predict = next_pc;
+			BHT[t][61] = 1;
+			BHT[t][60:31] = cur_pc-1;
+			BHT[t][30] = 0;
+			BHT[t][29:0] = next_pc;
+		end
+	end
+end
+
+always@(posedge clk) begin
+	if(Hazard && Brunchbubble) begin
+		if(flush==1)
+			flush = 1;
+	end
+	flush = 0;
+end
+
+always@(negedge clk)
 begin
 	if(!Hazard && !Brunchbubble) begin
+	end
 	if(rst == 1 && !clk)
-		next_pc <= temp[31:2];
-	else if(jalr == 1 && !clk) //jalr
-		next_pc <= jal_pc;
-	else if(jal == 1 && !clk)  //jal
-		next_pc <= {cur_pc[29:26],target[25:0]};
-	else if(branch_bne == 1 && !clk)  //bne
-		next_pc <= (zbne)?cur_pc-1+{14'b0,immediate}:cur_pc;
-	else if(branch_beq == 1 && !clk)  //beq
-		next_pc <= (zbeq)?cur_pc-1+{14'b0,immediate}:cur_pc;
-	else if(bgez == 1 && !clk)  //bgez
-		next_pc <= (zbgez==1)?cur_pc-1+{14'b0,immediate}:cur_pc;
-	else if(bltz == 1 && !clk)  //bltz
-		next_pc <= (zbgez==0)?cur_pc-1+{14'b0,immediate}:cur_pc;
-	else if(bgtz == 1 && !clk)  //bgtz
-		next_pc <= (zbgtz==1)?cur_pc-1+{14'b0,immediate}:cur_pc;
-	else if(blez == 1 && !clk)  //blez
-		next_pc <= (zbgtz==0)?cur_pc-1+{14'b0,immediate}:cur_pc;
-	else if(jump == 1 && !clk)  //jump
-		next_pc <= {cur_pc[29:26],target[25:0]};
-	else if(cp0op == 3'b011 && !clk)  //syscall
-		next_pc <= 30'd0;
-	else if(cp0op == 3'b100 && !clk)  //eret
-		next_pc <= cp0_pcout;
-	else if(clk)
+		next_pc = temp[31:2];
+	else if(jalr == 1 && !clk) begin//jalr
+		next_pc = jal_pc;
+		flush = 1;
+	end
+	else if(jal == 1 && !clk)  begin//jal
+		next_pc = {pre_pc[29:26],target[25:0]};
+		flush = 1;
+	end
+	else if(branch_bne == 1 && !clk)  begin//bne 
+		next_pc = (zbne)?pre_pc-1+{14'b0,immediate}:pre_pc;
+		if(next_pc != branch_predict) begin
+			for(i=0;i<=15;i=i+1) begin
+				if(BHT[i][61]==1&&BHT[i][60:31]==pre_pc-2) begin
+					BHT[i][30] = !BHT[i][30];
+					BHT[i][29:0] = next_pc;
+					flush = 1;
+				end
+			end	
+		end
+		else begin
+			next_pc = next_pc+1;
+			flush = 0;
+		end
+	end
+	else if(branch_beq == 1 && !clk)  begin//beq
+		next_pc = (zbeq)?pre_pc-1+{14'b0,immediate}:pre_pc;
+		if(next_pc != branch_predict) begin
+			for(i=0;i<=15;i=i+1) begin
+				if(BHT[i][61]==1&&BHT[i][60:31]==pre_pc-2) begin
+					BHT[i][30] = !BHT[i][30];
+					BHT[i][29:0] = next_pc;
+					flush = 1;
+				end
+			end	
+		end
+		else begin
+			next_pc = next_pc+1;
+			flush = 0;
+		end
+	end
+	else if(bgez == 1 && !clk)  begin//bgez
+		next_pc = (zbgez==1)?pre_pc-1+{14'b0,immediate}:pre_pc;
+		if(next_pc != branch_predict) begin
+			for(i=0;i<=15;i=i+1) begin
+				if(BHT[i][61]==1&&BHT[i][60:31]==pre_pc-2) begin
+					BHT[i][30] = !BHT[i][30];
+					BHT[i][29:0] = next_pc;
+					flush = 1;
+				end
+			end	
+		end
+		else begin
+			next_pc = next_pc+1;
+			flush = 0;
+		end
+	end
+	else if(bltz == 1 && !clk)  begin//bltz
+		next_pc = (zbgez==0)?pre_pc-1+{14'b0,immediate}:pre_pc;
+		if(next_pc != branch_predict) begin
+			for(i=0;i<=15;i=i+1) begin
+				if(BHT[i][61]==1&&BHT[i][60:31]==pre_pc-2) begin
+					BHT[i][30] = !BHT[i][30];
+					BHT[i][29:0] = next_pc;
+					flush = 1;
+				end
+			end	
+		end
+		else begin
+			next_pc = next_pc+1;
+			flush = 0;
+		end
+	end
+	else if(bgtz == 1 && !clk)  begin//bgtz
+		next_pc = (zbgtz==1)?pre_pc-1+{14'b0,immediate}:pre_pc;
+		if(next_pc != branch_predict) begin
+			for(i=0;i<=15;i=i+1) begin
+				if(BHT[i][61]==1&&BHT[i][60:31]==pre_pc-2) begin
+					BHT[i][30] = !BHT[i][30];
+					BHT[i][29:0] = next_pc;
+					flush = 1;
+				end
+			end	
+		end
+		else begin
+			next_pc = next_pc+1;
+			flush = 0;
+		end
+	end
+	else if(blez == 1 && !clk)  begin//blez
+		next_pc = (zbgtz==0)?pre_pc-1+{14'b0,immediate}:pre_pc;
+		if(next_pc != branch_predict) begin
+			for(i=0;i<=15;i=i+1) begin
+				if(BHT[i][61]==1&&BHT[i][60:31]==pre_pc-2) begin
+					BHT[i][30] = !BHT[i][30];
+					BHT[i][29:0] = next_pc;
+					flush = 1;
+				end
+			end	
+		end
+		else begin
+			next_pc = next_pc+1;
+			flush = 0;
+		end
+	end
+	else if(jump == 1 && !clk)  begin//jump
+		next_pc = {pre_pc[29:26],target[25:0]};
+		flush = 1;
+	end
+	else if(cp0op == 3'b011 && !clk)  begin//syscall
+		next_pc = 30'd0;
+		flush = 1;
+	end
+	else if(cp0op == 3'b100 && !clk)  begin//eret
+		next_pc = cp0_pcout;
+		flush = 1;
+	end
+	else if(!id_bgtz&&!id_bgez&&!id_blez&&!id_bltz&&!id_branch_beq&&!id_branch_bne) begin
 		next_pc = cur_pc+1;
 	end
 end
