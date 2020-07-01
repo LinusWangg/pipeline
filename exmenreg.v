@@ -43,15 +43,9 @@ initial begin
 	mem_busB_mux2 = 32'd0;
 end
 
-always@(*)
+always@(posedge clk or negedge clk)
 begin
-	if(cp0bubble == 2) begin
-		mem_cp0op = 3'b000;
-	end
-end
-
-always@(posedge clk)
-begin
+	if(clk) begin
 	mem_HL = ex_HL;
 	mem_result = ex_result;
 	mem_mult = ex_mult;
@@ -71,6 +65,11 @@ begin
 	mem_cs = ex_cs;
 	mem_cp0_dout = ex_cp0_dout;
 	mem_busB_mux2 = ex_busB_mux2;
+	end
+	else begin
+	if(cp0bubble == 2)
+		mem_cp0op = 3'b000;
+	end
 end
 
 endmodule

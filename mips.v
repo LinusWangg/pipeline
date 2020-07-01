@@ -5,11 +5,11 @@ module mips(clk,rst);
 
 	wire[29:0] NPC,PC,PC_plus_4,id_jalpc,jalpc1,ex_jalpc;
 	wire[31:0] if_ins;
-	wire[29:0] branch_predict;
+	wire[29:0] branch_predict,predict_pc;
 
 	wire branch_beq,branch_bne,bgez,blez,bgtz,bltz,zbgez,zbgtz,zbeq,zbne,jump,jal,jalr;
 	wire branchbubble,id_r31Wr;
-	wire flush;
+	wire flush,pc_sel;
 	wire[1:0] branchforwardA,branchforwardB,jalforward;
 	wire[31:0] id_ins;
 	wire[29:0] id_PC_plus_4,id_cp0_pcout,id_cp0_pcoutmux;
@@ -68,13 +68,13 @@ module mips(clk,rst);
 
 	wire hazard;
 	wire[1:0] cp0bubble;
-	pc get_pc(clk,NPC,rst,PC,hazard,branchbubble);
+	pc get_pc(clk,pc_sel,NPC,predict_pc,rst,PC,hazard,branchbubble);
 
 	jalforward jalforward1(id_ra,ex_rw_mux2,ex_regWr,ex_result,mem_rw,mem_regWr,mem_result,wr_rw,wr_regWr,wr_result,jalforward);
 	
 	mux4 mux_jalpc(jalpc1,ex_result[31:2],mem_result[31:2],wr_result[31:2],jalforward,id_jalpc);
 	
-	npc get_npc(clk,rst,flush,hazard,branchbubble,PC,id_PC_plus_4,branch_predict,ex_target,id_imm16,ex_imm32[15:0],ex_jalpc,id_cp0op,id_cp0_pcoutmux,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,ex_branch_beq,ex_branch_bne,ex_bgez,ex_bgtz,ex_blez,ex_bltz,zbgez,zbgtz,zbeq,zbne,ex_jalr,ex_jal,mem_zero,ex_jump,NPC,branch_predict,flush);
+	npc get_npc(clk,rst,flush,hazard,branchbubble,PC,id_PC_plus_4,branch_predict,ex_target,id_imm16,ex_imm32[15:0],ex_jalpc,id_cp0op,id_cp0_pcoutmux,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,ex_branch_beq,ex_branch_bne,ex_bgez,ex_bgtz,ex_blez,ex_bltz,zbgez,zbgtz,zbeq,zbne,ex_jalr,ex_jal,ex_jump,NPC,predict_pc,branch_predict,pc_sel,flush);
 	assign PC_plus_4 = PC+1;
 	im_4k get_im(PC[9:0],if_ins);
 

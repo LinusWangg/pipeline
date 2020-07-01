@@ -38,15 +38,9 @@ initial begin
 end
 
 
-always@(*)
+always@(posedge clk or negedge clk)
 begin
-	if(cp0bubble == 3) begin
-		wr_cp0op = 3'b000;
-	end
-end
-
-always@(posedge clk)
-begin
+	if(clk) begin
 	wr_dout = mem_dout;
 	wr_HL = mem_HL;
 	wr_result = mem_result;
@@ -64,6 +58,11 @@ begin
 	wr_cs = mem_cs;
 	wr_cp0_dout = mem_cp0_dout;
 	wr_busB_mux2 = mem_busB_mux2;
+	end
+	else begin
+	if(cp0bubble == 3)
+		wr_cp0op = 3'b000;
+	end
 end
 endmodule
 

@@ -62,15 +62,9 @@ initial begin
 	ex_r31Wr = 0;
 end
 
-always@(*)
+always@(posedge clk or negedge clk)
 begin
-	if(cp0bubble == 1) begin
-		ex_cp0op = 3'b000;
-	end
-end
-
-always@(posedge clk)
-begin
+	if(clk) begin
 	if(hazard || BranchBubble) begin
 		ex_regWr = 0;
 		ex_multWr = 0;
@@ -133,6 +127,11 @@ begin
 		ex_target = id_target;
 		ex_busB_mux2 = id_busB_mux2;
 		ex_r31Wr = id_r31Wr;
+	end
+	end
+	else begin
+	if(cp0bubble == 1)
+		ex_cp0op = 3'b000;
 	end
 end
 endmodule

@@ -5,7 +5,7 @@ input wire clk;
 
 output reg [1:0]cp0bubble;
 
-always@(negedge clk) begin
+always@(*) begin
 	if(id_cp0op == 3'b011 && ex_cp0op == 3'b010 && ex_sel == 0 && ex_cs == 14)
 		cp0bubble = 1;
 	else if(id_cp0op == 3'b011 && mem_cp0op == 3'b010 && mem_sel == 0 && mem_cs == 14)
