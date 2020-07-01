@@ -1245,6 +1245,31 @@ begin
 				end
 			endcase
 		end
+		default: begin
+			Extop = 0;  //have nothing to do with
+			regDst = 0;
+			regWr = 0;
+			multWr = 0;
+			hlsel = 0;
+			alusrc = 0;
+			memtoreg = 0;
+			memWr = 0;
+			checkover = 0;
+			jump = 0;
+			branch_beq = 0;
+			branch_bne = 0;
+			bgez = 0;
+			bgtz = 0;
+			blez = 0;
+			bltz = 0;
+			jalr = 0;
+			jal = 0;
+			r31Wr = 0;
+			Lowin = 0;
+			Highin = 0;
+			cp0op = 3'b000;
+			aluop = 5'b00000; 
+		end
 	endcase
 end
 endmodule
