@@ -78,7 +78,7 @@ module mips(clk,rst);
 	assign PC_plus_4 = PC+1;
 	im_4k get_im(PC[9:0],if_ins);
 
-	IFIDReg ifidreg(clk,flush,PC_plus_4,if_ins,ex_branch_beq,ex_branch_bne,ex_bgez,ex_bgtz,ex_blez,ex_bltz,zbeq,zbne,zbgez,zbgtz,ex_jalr,ex_jal,ex_jump,ex_cp0op,hazard,branchbubble,id_PC_plus_4,id_ins);
+	IFIDReg ifidreg(clk,flush,PC_plus_4,if_ins,hazard,branchbubble,id_PC_plus_4,id_ins);
 
 	decoder decoder(id_ins,id_op,id_ra,id_rb,id_rw,id_shamt,id_func,id_cs,id_sel,id_imm16,id_target);
 
@@ -114,9 +114,9 @@ module mips(clk,rst);
 
 	forwardunit forwardunit(ex_ra,ex_rb,mem_rw,mem_regWr,mem_memtoreg,mem_cp0op,wr_rw,wr_regWr,wr_memtoreg,wr_cp0op,forwardA,forwardB);
 
-	mux4 mux_alubusA(ex_busA,wr_busW,mem_result,alu3,forwardA,ex_alu_busA);
+	mux4 mux_alubusA(ex_busA,wr_busW,mem_forward,alu3,forwardA,ex_alu_busA);
 	
-	mux4 mux_alubusB(ex_busB,wr_busW,mem_result,alu3,forwardB,ex_forwardbusB);
+	mux4 mux_alubusB(ex_busB,wr_busW,mem_forward,alu3,forwardB,ex_forwardbusB);
 	
 	mux_memtoreg mux_alusrc_to_busB(ex_forwardbusB,ex_imm32,ex_alusrc,ex_alu_busB);
 
