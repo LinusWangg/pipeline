@@ -3,13 +3,12 @@ module IFIDReg(
 	flush,
 	pc_plus_4,
 	if_ins,
-	hazard,
 	BranchBubble,
 	id_pc_plus_4,
 	id_ins
 );
 
-input clk,hazard,BranchBubble,flush;
+input clk,BranchBubble,flush;
 input wire[29:0] pc_plus_4;
 input wire[31:0] if_ins;
 output reg[29:0] id_pc_plus_4;
@@ -21,7 +20,7 @@ end
 
 always@(posedge clk)
 begin
-	if(hazard || BranchBubble) begin
+	if(BranchBubble) begin
 	
 	end 
 	else if(flush) begin

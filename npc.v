@@ -2,7 +2,6 @@ module npc(
 	clk,
 	rst,
 	flushbefore,
-	Hazard,
 	Brunchbubble,
 	cur_pc,
 	pre_pc,
@@ -33,7 +32,7 @@ module npc(
 	pc_sel,
 	flush
 );
-input wire clk,rst,Hazard,Brunchbubble,flushbefore;
+input wire clk,rst,Brunchbubble,flushbefore;
 input wire[15:0] immediate,id_immediate;
 input wire[2:0] cp0op;
 input wire jump;  //zero-alu??????
@@ -95,14 +94,14 @@ end
 
 always@(posedge clk or negedge clk) begin
 	if(clk) begin
-		if(Hazard && Brunchbubble) begin
+		if(Brunchbubble) begin
 		if(flushbefore==1)
 			flush = 1;
 		end
 		flush = 0;
 	end
 	if(!clk) begin
-	if(!Hazard && !Brunchbubble) begin
+	if(!Brunchbubble) begin
 	end
 	if(rst == 1 && !clk)
 		next_pc = temp[31:2];

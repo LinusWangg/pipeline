@@ -20,7 +20,37 @@ initial begin
 		dm[i]=0;
 end
 always@(*) begin
-	DataOut = dm[Addr[11:2]];
+	if(op == 6'b100000) begin
+		if(Addr[1:0] == 2'b00) begin
+			DataOut = {{24{dm[Addr[11:2]][7]}},dm[Addr[11:2]][7:0]};
+		end
+		else if(Addr[1:0] == 2'b01) begin
+			DataOut = {{24{dm[Addr[11:2]][15]}},dm[Addr[11:2]][15:8]};
+		end
+		else if(Addr[1:0] == 2'b10) begin
+			DataOut = {{24{dm[Addr[11:2]][23]}},dm[Addr[11:2]][23:16]};
+		end
+		else if(Addr[1:0] == 2'b11) begin
+			DataOut = {{24{dm[Addr[11:2]][31]}},dm[Addr[11:2]][31:24]};
+		end
+	end
+	else if(op == 6'b100100) begin
+		if(Addr[1:0] == 2'b00) begin
+			DataOut = {{24'b0},dm[Addr[11:2]][7:0]};
+		end
+		else if(Addr[1:0] == 2'b01) begin
+			DataOut = {{24'b0},dm[Addr[11:2]][15:8]};
+		end
+		else if(Addr[1:0] == 2'b10) begin
+			DataOut = {{24'b0},dm[Addr[11:2]][23:16]};
+		end
+		else if(Addr[1:0] == 2'b11) begin
+			DataOut = {{24'b0},dm[Addr[11:2]][31:24]};
+		end
+	end
+	else begin
+		DataOut = dm[Addr[11:2]];
+	end
 end
 
 always@(negedge clk) begin

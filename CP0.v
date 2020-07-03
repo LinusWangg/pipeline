@@ -22,14 +22,14 @@ always@(negedge clk) begin
 		$display("%h->cp0[%d,%d]",busB,wr_cs,wr_sel);
 	end
 
-	if(id_cp0op == 3'b011) begin
-		cp0[112] = {PC,2'b0};
+	if(wr_cp0op == 3'b011) begin
+		cp0[112] = busB;
 		cp0[104][6:2] = 5'b01000;
 		cp0[96][1] = 1;
-		$display("%h->cp0[14,0]",{PC,2'b0});
+		$display("%h->cp0[14,0]",busB);
 	end
 
-	if(id_cp0op == 3'b100)  begin
+	if(wr_cp0op == 3'b100)  begin
 		cp0[96][1] = 0;
 	end
 end
