@@ -55,51 +55,8 @@ end
 always@(negedge clk) begin
 	if(regWe)
 	begin
-		case(op)
-		6'b100000:  //lb
-		begin
-		if(addr[1:0] == 2'b00) begin
-			registers[rw] = {{24{busW[7]}},busW[7:0]};
-			$display("%h->reg[%d]",{{24{busW[7]}},busW[7:0]},rw);
-		end
-		else if(addr[1:0] == 2'b01) begin
-			registers[rw] = {{24{busW[15]}},busW[15:8]};
-			$display("%h->reg[%d]",{{24{busW[15]}},busW[15:8]},rw);
-		end
-		else if(addr[1:0] == 2'b10) begin
-			registers[rw] = {{24{busW[23]}},busW[23:16]};
-			$display("%h->reg[%d]",{{24{busW[23]}},busW[23:16]},rw);
-		end
-		else if(addr[1:0] == 2'b11) begin
-			registers[rw] = {{24{busW[31]}},busW[31:24]};
-			$display("%h->reg[%d]",{{24{busW[31]}},busW[31:24]},rw);
-		end
-		end
-		6'b100100:  //lbu
-		begin
-		if(addr[1:0] == 2'b00) begin
-			registers[rw] = {{24'b0},busW[7:0]};
-			$display("%h->reg[%d]",{{24'b0},busW[7:0]},rw);
-		end
-		else if(addr[1:0] == 2'b01) begin
-			registers[rw] = {{24'b0},busW[15:8]};
-			$display("%h->reg[%d]",{{24'b0},busW[15:8]},rw);
-		end
-		else if(addr[1:0] == 2'b10) begin
-			registers[rw] = {{24'b0},busW[23:16]};
-			$display("%h->reg[%d]",{{24'b0},busW[23:16]},rw);
-		end
-		else if(addr[1:0] == 2'b11) begin
-			registers[rw] = {{24'b0},busW[31:24]};
-			$display("%h->reg[%d]",{{24'b0},busW[31:24]},rw);
-		end
-		end
-		default:  //lw
-		begin
-			registers[rw] = busW;
-			$display("%h->reg[%d]",busW,rw);
-		end
-		endcase
+		registers[rw] = busW;
+		$display("%h->reg[%d]",busW,rw);
 	end
 	if(r31We) begin
 		registers[31] = {r31,2'b0};
