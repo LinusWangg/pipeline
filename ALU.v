@@ -1,5 +1,6 @@
 module alu(
 	checkover,
+	pc,
 	aluop,
 	shamt,
 	DataA,
@@ -14,6 +15,7 @@ input wire[4:0] aluop;
 input wire[4:0] shamt;
 input wire[31:0] DataA;
 input wire[31:0] DataB;
+input wire[29:0] pc;
 input wire checkover;
 output reg zero,overflow;
 output reg[31:0] result;
@@ -67,6 +69,8 @@ always@(aluop or DataA or DataB) begin
 		zero = (result == 0)?1:0;
 		end
 		5'b01010: begin  //jalr
+		result = {pc,{2'b00}};
+		zero = (result == 0)?1:0;
 		end
 		5'b01011: begin  //jr
 		end

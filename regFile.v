@@ -8,9 +8,7 @@ module regfile(
 	cp0_dout,
 	addr,
 	regWe,
-	r31We,
 	multWe,
-	r31,
 	Lowin,
 	Highin,
 	busW,
@@ -22,14 +20,13 @@ module regfile(
 	jalpc
 );
 
-input wire clk,regWe,r31We,multWe,Highin,Lowin;
+input wire clk,regWe,multWe,Highin,Lowin;
 input wire[2:0] cp0op;
 input wire[4:0] rs,rt,rw;
 input wire[5:0] op;
 input wire[11:0] addr;
 input wire[31:0] busW,cp0_dout;
 input wire[63:0] busmult;
-input wire[29:0] r31;
 output reg[31:0] busA,busB,Highout,Lowout;
 output reg[29:0] jalpc;
 
@@ -57,10 +54,6 @@ always@(negedge clk) begin
 	begin
 		registers[rw] = busW;
 		$display("%h->reg[%d]",busW,rw);
-	end
-	if(r31We) begin
-		registers[31] = {r31,2'b0};
-		$display("%h->reg[31]",{r31,2'b0});
 	end
 	if(multWe)
 	begin

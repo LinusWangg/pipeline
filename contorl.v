@@ -25,15 +25,14 @@ module Control(
 	bltz,
 	jalr,
 	jal,
-	r31Wr,
 	cp0op,
 );
 
 input wire[5:0] op;
 input wire[4:0] rs,rt;
 input wire[5:0] func;
-output reg regWr,regDst,Extop,alusrc,memWr,checkover,jump,branch_beq,branch_bne,bgez,bgtz,blez,bltz,jalr,jal,r31Wr,multWr,hlsel,Lowin,Highin;
-output reg[1:0] memtoreg;
+output reg regWr,Extop,alusrc,memWr,checkover,jump,branch_beq,branch_bne,bgez,bgtz,blez,bltz,jalr,jal,multWr,hlsel,Lowin,Highin;
+output reg[1:0] memtoreg,regDst;
 output reg[2:0] cp0op;
 output reg[4:0] aluop;
 
@@ -53,7 +52,6 @@ initial begin
 	bltz = 0;
 	jalr = 0;
 	jal = 0;
-	r31Wr = 0;
 	hlsel = 0;
 	multWr = 0;
 	Lowin = 0;
@@ -83,7 +81,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -108,7 +105,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -133,7 +129,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -158,7 +153,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -183,7 +177,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -208,7 +201,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -216,8 +208,8 @@ begin
 			end
 		6'b000011: begin  //jal
 			Extop = 1;  //have nothing to do with
-			regDst = 0;  //have nothing to do with
-			regWr = 0;
+			regDst = 3;  //have nothing to do with
+			regWr = 1;
 			multWr = 0;
 			hlsel = 0;
 			alusrc = 0;  //have nothing to do with
@@ -233,7 +225,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 1;
-			r31Wr = 1;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -258,7 +249,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -283,7 +273,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -308,7 +297,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -334,7 +322,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -359,9 +346,7 @@ begin
 			bltz = 1;
 			jalr = 0;
 			jal = 0;
-			Lowin = 0;
 			Highin = 0;
-			r31Wr = 0;
 			cp0op = 3'b000;
 			end
 			end
@@ -384,7 +369,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -409,7 +393,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -434,7 +417,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -459,7 +441,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -483,7 +464,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -508,7 +488,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -533,7 +512,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -558,7 +536,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
@@ -584,7 +561,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b001;  //MFC0
@@ -609,7 +585,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b010;  //MTC0
@@ -634,7 +609,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b100;  //ERET
@@ -662,7 +636,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -687,7 +660,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -712,7 +684,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -737,7 +708,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -762,7 +732,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -787,7 +756,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -812,7 +780,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -837,7 +804,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -862,7 +828,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -887,7 +852,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -912,7 +876,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -937,7 +900,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -945,8 +907,8 @@ begin
 				end
 				6'b001001: begin  //jalr
 				Extop = 1;  //have nothing to do with
-				regDst = 1;
-				regWr = 0;
+				regDst = 3;
+				regWr = 1;
 				multWr = 0;
 				hlsel = 0;
 				alusrc = 0;
@@ -962,7 +924,6 @@ begin
 				bltz = 0;
 				jalr = 1;
 				jal = 0;
-				r31Wr = 1;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -987,7 +948,6 @@ begin
 				bltz = 0;
 				jalr = 1;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -1012,7 +972,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -1037,7 +996,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -1062,7 +1020,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -1087,7 +1044,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -1112,7 +1068,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -1137,7 +1092,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -1162,7 +1116,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -1187,7 +1140,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 1;
 				Highin = 0;
 				cp0op = 3'b000;
@@ -1212,7 +1164,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 1;
 				cp0op = 3'b000;
@@ -1237,7 +1188,6 @@ begin
 				bltz = 0;
 				jalr = 0;
 				jal = 0;
-				r31Wr = 0;
 				Lowin = 0;
 				Highin = 0;
 				cp0op = 3'b011;
@@ -1264,7 +1214,6 @@ begin
 			bltz = 0;
 			jalr = 0;
 			jal = 0;
-			r31Wr = 0;
 			Lowin = 0;
 			Highin = 0;
 			cp0op = 3'b000;
