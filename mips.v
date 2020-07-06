@@ -76,7 +76,7 @@ module mips(clk,rst,PC);
 
 	Control ctr(id_op,id_rb,id_ra,id_func,id_regWr,id_multWr,id_Lowin,id_Highin,id_hlsel,id_regDst,id_Extop,id_alusrc,id_aluop,id_memWr,id_memtoreg,id_checkover,id_jump,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,id_jalr,id_jal,id_cp0op);
 
-	regfile rf(clk,id_ra,id_rb,wr_rw,wr_op,wr_cp0op,wr_cp0_dout,wr_result[11:0],wr_regWr,wr_multWr,wr_Lowin,wr_Highin,wr_forward,wr_mult,id_busA,id_busB,id_Highout,id_Lowout,jalpc1);
+	regfile rf(clk,id_ra,id_rb,wr_rw,wr_op,wr_cp0op,wr_cp0_dout,wr_result[11:0],wr_regWr,wr_multWr,wr_Lowin,wr_Highin,wr_busA_mux2,wr_forward,wr_mult,id_busA,id_busB,id_Highout,id_Lowout,jalpc1);
 	
 	SignExt SignExt(id_imm16,id_Extop,id_imm32);
 

@@ -11,6 +11,7 @@ module regfile(
 	multWe,
 	Lowin,
 	Highin,
+	wr_busA_mux2,
 	busW,
 	busmult,
 	busA,
@@ -21,6 +22,7 @@ module regfile(
 );
 
 input wire clk,regWe,multWe,Highin,Lowin;
+input wire[31:0] wr_busA_mux2;
 input wire[2:0] cp0op;
 input wire[4:0] rs,rt,rw;
 input wire[5:0] op;
@@ -64,13 +66,13 @@ always@(negedge clk) begin
 	end
 	if(Highin)
 	begin
-		High = busW;
-		$display("%h->Hign",busW);
+		High = wr_busA_mux2;
+		$display("%h->Hign",wr_busA_mux2);
 	end
 	if(Lowin)
 	begin
-		Low = busW;
-		$display("%h->Low",busW);
+		Low = wr_busA_mux2;
+		$display("%h->Low",wr_busA_mux2);
 	end
 	if(cp0op == 3'b001)
 	begin
