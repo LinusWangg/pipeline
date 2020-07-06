@@ -1128,7 +1128,7 @@ begin
 				multWr = 0;
 				hlsel = 1;
 				alusrc = 0;
-				memtoreg = 3;
+				memtoreg = 0;
 				memWr = 0;
 				checkover = 0;
 				jump = 0;
@@ -1152,7 +1152,7 @@ begin
 				multWr = 0;
 				hlsel = 1;
 				alusrc = 0;
-				memtoreg = 3;
+				memtoreg = 0;
 				memWr = 0;
 				checkover = 0;
 				jump = 0;

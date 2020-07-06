@@ -55,7 +55,6 @@ module mips(clk,rst,PC);
 	wire[31:0] wr_result,wr_HL,wr_busA_mux2,wr_busB_mux2,wr_cp0_dout;
 	wire[63:0] wr_mult;
 	wire[4:0] wr_rw,wr_cs;
-	wire[31:0] wr_busW;
 	wire[5:0] wr_op;
 	wire[2:0] wr_cp0op,wr_sel;
 
@@ -77,7 +76,7 @@ module mips(clk,rst,PC);
 
 	Control ctr(id_op,id_rb,id_ra,id_func,id_regWr,id_multWr,id_Lowin,id_Highin,id_hlsel,id_regDst,id_Extop,id_alusrc,id_aluop,id_memWr,id_memtoreg,id_checkover,id_jump,id_branch_beq,id_branch_bne,id_bgez,id_bgtz,id_blez,id_bltz,id_jalr,id_jal,id_cp0op);
 
-	regfile rf(clk,id_ra,id_rb,wr_rw,wr_op,wr_cp0op,wr_cp0_dout,wr_result[11:0],wr_regWr,wr_multWr,wr_Lowin,wr_Highin,wr_busW,wr_mult,id_busA,id_busB,id_Highout,id_Lowout,jalpc1);
+	regfile rf(clk,id_ra,id_rb,wr_rw,wr_op,wr_cp0op,wr_cp0_dout,wr_result[11:0],wr_regWr,wr_multWr,wr_Lowin,wr_Highin,wr_forward,wr_mult,id_busA,id_busB,id_Highout,id_Lowout,jalpc1);
 	
 	SignExt SignExt(id_imm16,id_Extop,id_imm32);
 
@@ -112,8 +111,6 @@ module mips(clk,rst,PC);
 	dm_4k dm_4k(clk,mem_op,mem_memWr,mem_result[11:0],mem_busB_mux2,mem_Dataout);
 
 	mem_wr mem_wr(clk,mem_Dataout,mem_HL,mem_result,mem_mult,mem_busA_mux2,mem_busB_mux2,mem_rw,mem_regWr,mem_multWr,mem_memtoreg,mem_op,mem_Lowin,mem_Highin,mem_cp0op,mem_cs,mem_sel,mem_cp0_dout,wr_Dataout,wr_HL,wr_result,wr_mult,wr_busA_mux2,wr_busB_mux2,wr_rw,wr_regWr,wr_multWr,wr_memtoreg,wr_op,wr_Lowin,wr_Highin,wr_cp0op,wr_cs,wr_sel,wr_cp0_dout);
-
-	mux4 mux(wr_result,wr_Dataout,wr_HL,wr_busA_mux2,wr_memtoreg,wr_busW);
 
 	mux_memtoreg muxHL(id_Lowoutmux4,id_Highoutmux4,id_hlsel,id_HL);
 
